@@ -1,3 +1,9 @@
+#tela
+{
+    background-color: #000000;
+    /* background-image: url('IMG.PNG'); */
+    border: solid#FF0000 2px;
+}
 body
 {
     background-color: black;
@@ -7,14 +13,6 @@ p
 {
     text-align: center;
 }
-
-#tela
-{
-    background-color: #000000;
-    /* background-image: url('IMG.PNG'); */
-    border: solid#FF0000 2px;
-}
-
 button
 {
     background-color: #9dce2c;
@@ -23,12 +21,10 @@ button
     padding: 10px;
     cursor: pointer;
 }
-
 button:hover
 {
     background-color: #7bac0a;
 }
-
 button:disabled
 {
     background-color: #DDDDDD;

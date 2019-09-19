@@ -2,7 +2,7 @@
 var X = true;
 var l = false;
 
-varLesq = [
+var Lesq = [
             //Posição 1
             [    [l,X,l],
                  [l,X,l],
@@ -17,9 +17,9 @@ varLesq = [
             //Posição 4
             [    [l,l,X],
                  [X,X,X]    ]
-        ];
+    ];
 
-varLdir = [
+var Ldir = [
             //Posição 1
             [   [l,X,l],
                 [l,X,l],
@@ -34,8 +34,13 @@ varLdir = [
             //Posição 4
             [   [X,l,l],
                 [X,X,X]     ]
-        ];
+    ];
 
+var Quad = [
+            //Posição 1 (Unica)
+            [   [X,X,l],
+                [X,X,l]     ]
+    ];
 
 //Cria um arraypara indexar de forma aleatória uma peça
-var todasPedras = [/*quadrado, linha, */Lesq, Ldir/*, Te, S1, S2*/];
+var todasPedras = [/*Quad, linha, */Lesq, Ldir/*, Te, S1, S2*/];
