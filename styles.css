@@ -8,7 +8,7 @@ p {
 
 #tela {
     background-color: #000000;
-    background-image: url('img/bg.png');
+    /* background-image: url('IMG.PNG'); */
     border: solid#FF0000 2px;
 }
 
