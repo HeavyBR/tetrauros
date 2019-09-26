@@ -1,30 +1,32 @@
-body {
+#tela
+{
+    background-color: #000000;
+    /* background-image: url('IMG.PNG'); */
+    border: solid#FF0000 2px;
+}
+body
+{
     background-color: black;
 }
 
-p {
+p
+{
     text-align: center;
 }
-
-#tela {
-    background-color: #000000;
-    background-image: url('img/bg.png');
-    border: solid#FF0000 2px;
-}
-
-button {
+button
+{
     background-color: #9dce2c;
     border: none;
     color: white;
     padding: 10px;
     cursor: pointer;
 }
-
-button:hover {
+button:hover
+{
     background-color: #7bac0a;
 }
-
-button:disabled {
+button:disabled
+{
     background-color: #DDDDDD;
     cursor: not-allowed;
 }
