@@ -5,6 +5,7 @@ const SQ = SQUARESIZE = 20;
 const LINHA = Math.floor(cvs.height / SQUARESIZE);
 const COLUNA = Math.floor(cvs.width / SQUARESIZE);
 
+
 let tabuleiro = [];
 
 
@@ -19,20 +20,26 @@ for(l = 0; l < LINHA; l++)
 }
 
 
+/*
+    ******************************************************************
+    * Funcoes - DESENHO
+    ******************************************************************
+ */
+
+// Funcao que desenha o painel de jogo
 function drawBoard()
 {
     for(l = 0; l < LINHA; l++)
     {
         for(c = 0; c < COLUNA; c++)
         {
-            drawSquare(c,l,tabuleiro[l][c]);
+            drawSquare(c, l, tabuleiro[l][c]);
         }
     }
 }
-
 drawBoard();
 
-//Functions
+// Funcao que desenha o quadrado do tetromino
 function drawSquare(x,y,color)
 {
     ctx.fillStyle = color;
@@ -41,6 +48,7 @@ function drawSquare(x,y,color)
     ctx.strokeRect(x * SQ, y * SQ, SQ , SQ);
 }
 
+// Declaracao dos tetromino e cores
 const PIECES = [
     [Z, "red"],
     [S, "green"],
@@ -51,9 +59,10 @@ const PIECES = [
     [J, "orange"]
 ];
 
-
+// Teste - Passando o bloco 'Z' e cor vermelha
 let p = new Piece(PIECES[0][0], PIECES[0][1]);
 
+// Funcao que desenha o tetromino no painel do jogo
 function Piece(tetromino, color)
 {
     this.tetromino = tetromino;
@@ -66,6 +75,8 @@ function Piece(tetromino, color)
 
 }
 
+// Prototipo = Acrescenta uma informacao (funcao) em uma outra funcao
+// Funcao que preenche o tetromino
 Piece.prototype.fill = function(color)
 {
     for(l = 0; l < this.activeTetromino.length; l++)
@@ -80,18 +91,38 @@ Piece.prototype.fill = function(color)
     }
 }
 
+// Funcao preenche o tetromino com a cor desejada
 Piece.prototype.draw = function () {
     this.fill(this.color);
 }
 
+// Funcao que apaga o tetromino
+// Funcao é necessaria para que o tetromino nao fique "gigante"
 Piece.prototype.unDraw = function()
 {
     this.fill(VAZIO);
 }
 
+/*
+    ******************************************************************
+    * Funcoes - MOVIMENTO
+    ******************************************************************
+ */
+
+// Funcao que movimenta tetromino para CIMA
+Piece.prototype.moveDown = function () {
+    if(!this.collision(0,-1, this.activeTetromino))
+    {
+        this.unDraw();
+        this.y--;
+        this.draw();
+    }
+}
+
+// Funcao que movimenta tetromino para esquerda
 Piece.prototype.moveLeft = function()
 {
-    if(!this.collision(-1,0,this.activeTetromino))
+    if(!this.collision(-1,0, this.activeTetromino))
     {
         this.unDraw();
         this.x--;
@@ -100,6 +131,7 @@ Piece.prototype.moveLeft = function()
 
 }
 
+// Funcao que movimenta tetromino para direita
 Piece.prototype.moveRight = function()
 {
     if(!this.collision(1,0, this.activeTetromino))
@@ -111,77 +143,75 @@ Piece.prototype.moveRight = function()
 
 }
 
-Piece.prototype.moveDown = function () {
-
-        this.unDraw();
-        this.y--;
-        this.draw();
-
-}
-
+// Funcao que realiza a troca de tetromino (faz rotacao)
 Piece.prototype.rotate = function()
 {
     let nextPattern = this.tetromino[(this.tetrominoN + 1) % this.tetromino.length];
+    let kick = 0;
 
-    if(!this.collision((0,0,nextPattern)))
+    //
+    if(this.collision(0, 0, nextPattern))
+    {
+        if(this.x > COLUNA/2)
+        {
+            // Parede da direita
+            // kick = -1 move o tetromino para esquerda
+            kick = -1;
+        }
+        else
+        {
+            // Parede da esquerda
+            // kick = 1 move o tetromino para direita
+            kick = 1;
+        }
+    }
+
+    //
+    if(!this.collision(kick, 0, nextPattern))
     {
         this.unDraw();
+
+        this.x += kick;
+
         this.tetrominoN = (this.tetrominoN + 1) % this.tetromino.length;
         this.activeTetromino = this.tetromino[this.tetrominoN];
         this.draw();
     }
 }
 
-//CONTROLANDO AS PEÇAS
-document.addEventListener("keydown", CONTROL);
-
-function CONTROL(event)
-{
-    if(event.keyCode == 37)
-    {
-        p.moveLeft();
-    }
-    else if(event.keyCode == 38)
-    {
-        p.rotate();
-    }
-    else if(event.keyCode == 39)
-    {
-        p.moveRight();
-    }
-    else if (event.keyCode == 40)
-    {
-        p.moveDown();
-    }
-}
-
-//Colisão
-Piece.prototype.collision = function(x,y,piece)
+// Funcao de colisoes
+Piece.prototype.collision = function(x, y, piece)
 {
     for(l = 0; l < piece.length; l++)
     {
         for(c = 0; c < piece.length; c++)
         {
-            //Se o quadrado estiver vazio nós o ignoramos
+            //Se o quadrado estiver vazio nós o ignoramos, nao precisa verificar colisao
             if(!piece[l][c])
             {
                 continue;
             }
 
+            // Coordenadas do quadrado do tetromino apos movimento
             let novoX = this.x + c + x;
             let novoY = this.y + l + y;
 
+            // Condicao que prende o tetromino dentro do painel
             if(novoX < 0 || novoX >= COLUNA || novoY >= LINHA)
             {
                 return true;
             }
 
-            if(novoY > COLUNA - 1 )
+            // Funcao que impede que
+            // novoY < 0
+            // novoY > LINHA - 1
+            if(novoY > LINHA - 1)
             {
                 continue;
             }
 
-            if(board[novoY][novoX] != VAZIO)
+            // Condicao que checa se JA HA um quadrado de um tetromino na posicao seguinte (apos o movimento)
+            if(tabuleiro[novoY][novoX] !== VAZIO)
             {
                 return true;
             }
@@ -190,6 +220,35 @@ Piece.prototype.collision = function(x,y,piece)
     }
     return false;
 }
+
+// Variavel que obtem a tecla clicada pelo usuario
+document.addEventListener("keydown", CONTROL);
+
+// Funcao que move a peça de acordo com o clique
+function CONTROL(event)
+{
+    if(event.key === "ArrowLeft")
+    {
+        p.moveLeft();
+        dropStart = Date.now();
+    }
+    else if(event.key === "ArrowUp")
+    {
+        p.rotate();
+        dropStart = Date.now();
+    }
+    else if(event.key === "ArrowRight")
+    {
+        p.moveRight();
+        dropStart = Date.now();
+    }
+    else if (event.key === "ArrowDown")
+    {
+        p.moveDown();
+        dropStart = Date.now();
+    }
+}
+
 
 //Mover a peça todo frame
 
