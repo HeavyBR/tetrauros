@@ -1,0 +1,23 @@
+//Conceitos básico OO
+Encapsulamento
+Polimorfismo
+
+responsabilidade da classe:
+São as obrigações que uma classe deve cumprir
+por meio de seus atributos (características)
+e de suas operações(comportamentos).
+Ou seja, o que ela conhece e o que ela faz
+-status : Status = devendo {pago,devendo}
+
+
+Um ciclo de vida é um método sistemático de desenvolvimento de software
+onde o resultado de uma fase se constitui na entrada de outra
+fase
+
+Fases
+Levantamento de requisitos
+Análise de requisitos
+Projeto
+Implementação
+Testes
+Manutenção
