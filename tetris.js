@@ -14,15 +14,15 @@ let tabuleiro = [];
 const CriaTabuleiro = () => {
     for(l = 0; l < LINHA; l++) //ok
     {
-    tabuleiro[l] = [];
-    for(c = 0; c < COLUNA; c++)
-        {
-        tabuleiro[l][c] = VAZIO;
-        }
+        tabuleiro[l] = [];
+        for(c = 0; c < COLUNA; c++)
+            {
+                tabuleiro[l][c] = VAZIO;
+            }
     }
 }
 
-CriaTabuleiro()
+CriaTabuleiro();
 
 
 class Peca
@@ -47,10 +47,7 @@ class Peca
 }
 
 
-
-
 //Criando tabuleiro e preenchendo com blocos brancos
-
 
 
 /*
@@ -71,13 +68,16 @@ function desenharBloco(x,y,color)
 
 // Declaracao dos tetromino e cores
 const PIECES = [
-    [Z, "red"],
-    [S, "green"],
-    [T,"yellow"],
-    [O, "blue"],
-    [L, "purple"],
+    [L, "red"],
+    [J, "green"],
+    [T,"purple"],
+    [O, "yellow"],
     [I, "cyan"],
-    [J, "orange"]
+    [U, "orange"],
+    /*
+    [S, "purple"],
+    [Z, "orange"]
+    */
 ];
 
 // ++++++++++++++++++++++
@@ -289,7 +289,7 @@ Peca.prototype.lock = function()
         for(c = COLUNA - 1; c >= 0; c--)
         {
             // linhaCompleta = 1;
-            // tabuleiro[l][c] !== VAZIO --> 0 se qudrado esta vazio; 1 se quadrado esta completo
+            // tabuleiro[l][c] != VAZIO --> 0 se qudrado esta vazio; 1 se quadrado esta completo
             // 1 * 1 = true 
             // 1 * 0 = false 
             console.log(l)
