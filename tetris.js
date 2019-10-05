@@ -1,15 +1,14 @@
 const cvs = document.getElementById('tela');
-const VAZIO = "white";
+const VAZIO = "black"; // Cor de fundo do canvas
 const ctx = cvs.getContext('2d');
 const AREA_BLOCO = 20;
 const LINHA = Math.floor(cvs.height / AREA_BLOCO);
 const COLUNA = Math.floor(cvs.width / AREA_BLOCO);
 
-console.log(LINHA)  // 25
-console.log(COLUNA) // 17
+console.log(LINHA)  // 20
+console.log(COLUNA) // 10
 
 let tabuleiro = [];
-
 
 const CriaTabuleiro = () => {
     for(l = 0; l < LINHA; l++) //ok
@@ -62,18 +61,18 @@ function desenharBloco(x,y,color)
 {
     ctx.fillStyle = color;
     ctx.fillRect(x * AREA_BLOCO,y * AREA_BLOCO, AREA_BLOCO, AREA_BLOCO);
-    ctx.strokeStyle = "black";
+    ctx.strokeStyle = "#141414"; // Cor das linhas do canvas
     ctx.strokeRect(x * AREA_BLOCO, y * AREA_BLOCO, AREA_BLOCO , AREA_BLOCO);
 };
 
 // Declaracao dos tetromino e cores
 const PIECES = [
-    [L, "red"],
-    [J, "green"],
+    [L, "orange"],
+    [J, "blue"],
     [T,"purple"],
     [O, "yellow"],
     [I, "cyan"],
-    [U, "orange"],
+    [U, "green"],
     /*
     [S, "purple"],
     [Z, "orange"]

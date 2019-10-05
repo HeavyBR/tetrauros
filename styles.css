@@ -1,32 +1,122 @@
-#tela
-{
-    background-color: #000000;
-    /* background-image: url('IMG.PNG'); */
-    border: solid#FF0000 2px;
-}
 body
 {
-    background-color: black;
-}
+    background-image: url("img/star.jpg");
+    background-size: cover;
+    height: 100%;
+    width: 100%;
 
-p
-{
-    text-align: center;
+    font-family: 'Black Ops One', cursive;
+    font-family: 'Press Start 2P', cursive;
+    font-family: 'Saira Stencil One', cursive;
+
+    margin-top: 2.5%;
+    margin-bottom: 2.5%;
+    margin-left: 0%;
+    margin-right: 0%;
+    background-color: grey;
+
+    overflow: hidden;
 }
-button
+table
 {
-    background-color: #9dce2c;
-    border: none;
-    color: white;
-    padding: 10px;
-    cursor: pointer;
+    width: 100%;
 }
 button:hover
 {
-    background-color: #7bac0a;
+    background-color: #4682B4;
 }
 button:disabled
 {
     background-color: #DDDDDD;
     cursor: not-allowed;
+}
+.opcoes
+{
+    padding-left: 15px;
+    padding-right: 35px;
+}
+.normal
+{
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.5em;
+    border-radius: 5px;
+    background-color: #191970;
+    border: none;
+    color: white;
+    padding: 12px;
+    width: 100px;
+    height: 40px;
+    cursor: pointer;
+}
+.grande
+{
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.5em;
+    margin-top: 5px;
+    background-color: #191970;
+    border-radius: 5px;
+    border: none;
+    color: white;
+    padding: 12px;
+    width: 309px;
+    height: 40px;
+    cursor: pointer;
+}
+.corpo
+{
+    position: relative;
+    background-color:black;
+    opacity:0.9; /* Levemente transparente */
+
+    width:65%;
+    margin-left:15%;
+    margin-right:15%;
+    padding-left:2.5%;
+    padding-right:2.5%;
+
+    height:70%;
+    padding-top:2.5%;
+    padding-bottom:2.5%;
+
+    border-radius:15px;
+}
+.informacoes
+{
+    text-align: center;
+    margin: 0%;
+    color: whitesmoke;
+    font-size: 1.5em;
+    float:left;
+}
+.ranking
+{
+    text-align: center;
+    margin: 0%;
+    color: whitesmoke;
+    font-size: 1.5em;
+    float:right;
+}
+#tela
+{
+    background-color: #000000;
+    border: solid #FFFFFF 2px;
+}
+#opcoes
+{
+    padding-left: 34%;
+}
+#titulo
+{
+    font-size: 3em;
+    font-family: 'Saira Stencil One', cursive;
+    color: whitesmoke;
+    font-size: 3em;
+    text-align: center;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+#jogo
+{
+    text-align: center;
+    margin: 0%;
 }
