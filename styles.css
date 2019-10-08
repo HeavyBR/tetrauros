@@ -20,6 +20,11 @@ body
 table
 {
     width: 100%;
+    align-self: center;
+}
+td
+{
+    text-align: center;
 }
 button:hover
 {
@@ -29,11 +34,6 @@ button:disabled
 {
     background-color: #DDDDDD;
     cursor: not-allowed;
-}
-.opcoes
-{
-    padding-left: 15px;
-    padding-right: 35px;
 }
 .normal
 {
@@ -68,9 +68,9 @@ button:disabled
     background-color:black;
     opacity:0.9; /* Levemente transparente */
 
-    width:65%;
-    margin-left:15%;
-    margin-right:15%;
+    width:75%;
+    margin-left:10%;
+    margin-right:10%;
     padding-left:2.5%;
     padding-right:2.5%;
 
@@ -82,6 +82,7 @@ button:disabled
 }
 .informacoes
 {
+    display: inline-block;
     text-align: center;
     margin: 0%;
     color: whitesmoke;
@@ -96,21 +97,25 @@ button:disabled
     font-size: 1.5em;
     float:right;
 }
+.lateral
+{
+    width: 25%;
+    margin: auto;
+}
+.meio
+{
+    width: 50%;
+}
 #tela
 {
     background-color: #000000;
     border: solid #FFFFFF 2px;
-}
-#opcoes
-{
-    padding-left: 34%;
 }
 #titulo
 {
     font-size: 3em;
     font-family: 'Saira Stencil One', cursive;
     color: whitesmoke;
-    font-size: 3em;
     text-align: center;
     margin-top: auto;
     margin-bottom: auto;
@@ -119,4 +124,8 @@ button:disabled
 {
     text-align: center;
     margin: 0%;
+}
+#score, #time, #stage, #deletedLines, #ranking01, #ranking02, #ranking03, #ranking04
+{
+    display: inline-block;
 }

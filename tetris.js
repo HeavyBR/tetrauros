@@ -1,12 +1,16 @@
+let SCORE = document.getElementById('score');
+let deletedLINES = document.getElementById('deletedLines');
+
 const cvs = document.getElementById('tela');
-const VAZIO = "black"; // Cor de fundo do canvas
 const ctx = cvs.getContext('2d');
 const AREA_BLOCO = 20;
 const LINHA = Math.floor(cvs.height / AREA_BLOCO);
 const COLUNA = Math.floor(cvs.width / AREA_BLOCO);
 
-console.log(LINHA)  // 20
-console.log(COLUNA) // 10
+const VAZIO = "BLACK"; // Cor de fundo do canvas
+
+//console.log(LINHA)  // 20
+//console.log(COLUNA) // 10
 
 let tabuleiro = [];
 
@@ -19,7 +23,7 @@ const CriaTabuleiro = () => {
                 tabuleiro[l][c] = VAZIO;
             }
     }
-}
+};
 
 CriaTabuleiro();
 
@@ -27,11 +31,11 @@ CriaTabuleiro();
 class Peca
 {
     constructor(tetromino, cor){
-        this.cor = cor
-        this.tetromino = tetromino
-        this.posicaoDaPeca = 0
-        this.pecaAtiva = this.tetromino[this.posicaoDaPeca]
-        this.x = Math.floor(COLUNA / 2) - 1 
+        this.cor = cor;
+        this.tetromino = tetromino;
+        this.posicaoDaPeca = 0;
+        this.pecaAtiva = this.tetromino[this.posicaoDaPeca];
+        this.x = Math.floor(COLUNA / 2) - 1;
         this.y = LINHA - 1
     }
 
@@ -63,7 +67,7 @@ function desenharBloco(x,y,color)
     ctx.fillRect(x * AREA_BLOCO,y * AREA_BLOCO, AREA_BLOCO, AREA_BLOCO);
     ctx.strokeStyle = "#141414"; // Cor das linhas do canvas
     ctx.strokeRect(x * AREA_BLOCO, y * AREA_BLOCO, AREA_BLOCO , AREA_BLOCO);
-};
+}
 
 // Declaracao dos tetromino e cores
 const PIECES = [
@@ -73,10 +77,6 @@ const PIECES = [
     [O, "yellow"],
     [I, "cyan"],
     [U, "green"],
-    /*
-    [S, "purple"],
-    [Z, "orange"]
-    */
 ];
 
 // ++++++++++++++++++++++
@@ -108,9 +108,9 @@ let p = pecaAleatoria();
 // Funcao que preenche o tetromino
 Peca.prototype.fill = function(color)
 {
-    for(l = 0; l < this.pecaAtiva.length; l++)
+    for(let l = 0; l < this.pecaAtiva.length; l++)
     {
-        for(c = 0; c < this.pecaAtiva.length; c++)
+        for(let c = 0; c < this.pecaAtiva.length; c++)
         {
             if(this.pecaAtiva[l][c])
             {
@@ -145,7 +145,8 @@ Peca.prototype.moveDown = function ()
         this.unDraw();
         this.y--;
         this.draw();
-    } 
+    }
+    // Quando colidir, deve "travar" e gerar nova peca!
     else
     {
         this.lock();
@@ -179,6 +180,7 @@ Peca.prototype.moveRight = function()
 // Funcao que realiza a troca de tetromino (faz rotacao)
 Peca.prototype.rotate = function()
 {
+    // Criar ciclo de 0 a 3, impedindo a chamada de uma peca que nao exista!
     let nextPattern = this.tetromino[(this.posicaoDaPeca + 1) % this.tetromino.length];
     let kick = 0;
 
@@ -207,9 +209,7 @@ Peca.prototype.rotate = function()
     if(!this.collision(kick, 0, nextPattern))
     {
         this.unDraw();
-
         this.x += kick;
-
         this.posicaoDaPeca = (this.posicaoDaPeca + 1) % this.tetromino.length;
         this.pecaAtiva = this.tetromino[this.posicaoDaPeca];
         this.draw();
@@ -219,9 +219,9 @@ Peca.prototype.rotate = function()
 // Funcao de colisoes
 Peca.prototype.collision = function(x, y, peca)
 {
-    for(l = 0; l < peca.length; l++)
+    for(let l = 0; l < peca.length; l++)
     {
-        for(c = 0; c < peca.length; c++)
+        for(let c = 0; c < peca.length; c++)
         {
             //Se o quadrado estiver vazio nós o ignoramos, nao precisa verificar colisao
             if(!peca[l][c])
@@ -230,26 +230,23 @@ Peca.prototype.collision = function(x, y, peca)
             }
 
             // Coordenadas do quadrado do tetromino apos movimento
-            let novoX = this.x + c + x;
-            let novoY = this.y + l + y;
+            let proxX = this.x + c + x;
+            let proxY = this.y + l + y;
 
             // Condicao que prende o tetromino dentro do painel
-            if(novoX < 0 || novoX >= COLUNA || novoY < 0)
+            if(proxX < 0 || proxX >= COLUNA || proxY < 0)
             {
                 return true;
             }
 
             // Funcao que impede que
-            // novoY < 0
-            // novoY > LINHA - 1
-            if(novoY > LINHA - 1)
+            if(proxY > LINHA - 1)
             {
                 continue;
             }
-            console.log(novoY);
             // Condicao que checa se JA HA um quadrado de um tetromino na posicao seguinte (apos o movimento)
             //25 24
-            if(tabuleiro[novoY][novoX] !== VAZIO)
+            if(tabuleiro[proxY][proxX] !== VAZIO)
             {
                 return true;
             }
@@ -259,11 +256,13 @@ Peca.prototype.collision = function(x, y, peca)
     return false;
 };
 
+let score = 0;
+let deadLINES = 0;
 Peca.prototype.lock = function()
 {
-    for(l = 0; l < this.pecaAtiva.length; l++)
+    for(let l = 0; l < this.pecaAtiva.length; l++)
     {
-        for(c = 0; c < this.pecaAtiva.length; c++)
+        for(let c = 0; c < this.pecaAtiva.length; c++)
         {
             // Pular os quadrados vazios
             if(!this.pecaAtiva[l][c])
@@ -282,22 +281,22 @@ Peca.prototype.lock = function()
         }
     }
     // Remover linhas completas
-    for(l = LINHA - 1; l >= 0; l--)
+    for(let l = LINHA - 1; l >= 0; l--)
     {
         let linhaCompleta = true;
-        for(c = COLUNA - 1; c >= 0; c--)
+        for(let c = COLUNA - 1; c >= 0; c--)
         {
             // linhaCompleta = 1;
             // tabuleiro[l][c] != VAZIO --> 0 se qudrado esta vazio; 1 se quadrado esta completo
             // 1 * 1 = true 
-            // 1 * 0 = false 
-            console.log(l)
-            linhaCompleta = linhaCompleta && (tabuleiro[l][c] != VAZIO);
+            // 1 * 0 = false
+            linhaCompleta = (linhaCompleta && (tabuleiro[l][c] !== VAZIO));
             console.log(linhaCompleta)
         }
         if(linhaCompleta)
         {
-            for(let j = 0; j < LINHA - 1; j++)
+            // "j" deve receber "l" para remover somente a linha que está cheia
+            for(let j = l; j < LINHA - 1; j++)
             {
                 for(let i = 0; i < COLUNA; i++)
                 {
@@ -308,9 +307,16 @@ Peca.prototype.lock = function()
             {
                 tabuleiro[LINHA - 1][i] = VAZIO;
             }
+            score += 10;
+            deadLINES += 1;
+
         }
     }
-    Tabuleiro.desenhar()
+    // Atualizar tabuleiro
+    Tabuleiro.desenhar();
+    // Atualizar Informacoes
+    SCORE.innerHTML = score;
+    deletedLINES.innerHTML = deadLINES;
 };
 
 // Variavel que obtem a tecla clicada pelo usuario
@@ -339,12 +345,10 @@ function CONTROL(event)
         p.moveDown();
         dropStart = Date.now();
     }
-};
-
-
+}
 
 let dropStart = Date.now();
-var gameOver = false;
+let gameOver = false;
 
 //Mover a peça todo frame
 function drop() {
@@ -359,23 +363,23 @@ function drop() {
     {
         requestAnimationFrame(drop);
     }
-};
+}
 
 
 
 // Funcao que desenha o painel de jogo
 var Tabuleiro  = {
     desenhar: function(){
-       for(l = 0; l < LINHA; l++)
+       for(let l = 0; l < LINHA; l++)
         {
-            for(c = 0; c < COLUNA; c++)
+            for(let c = 0; c < COLUNA; c++)
             {
                desenharBloco(c, l, tabuleiro[l][c]);
             }
         }
     }
-}
+};
 
-Tabuleiro.desenhar()
+Tabuleiro.desenhar();
 
 drop();
