@@ -1,32 +1,30 @@
 let SCORE = document.getElementById('score');
 let deletedLINES = document.getElementById('deletedLines');
 
-const cvs = document.getElementById('tela');
-const ctx = cvs.getContext('2d');
+const canvas = document.getElementById('tela');
+let largura = canvas.offsetWidth - 4; // - 4 exclui os dois pixel de borda de cada lado
+let altura = canvas.offsetHeight - 4;
+const ctx = canvas.getContext('2d');
 const AREA_BLOCO = 20;
-const LINHA = Math.floor(cvs.height / AREA_BLOCO);
-const COLUNA = Math.floor(cvs.width / AREA_BLOCO);
+let LINHA = Math.floor((altura) / AREA_BLOCO);
+let COLUNA = Math.floor((largura) / AREA_BLOCO);
 
 const VAZIO = "BLACK"; // Cor de fundo do canvas
 
-//console.log(LINHA)  // 20
-//console.log(COLUNA) // 10
-
 let tabuleiro = [];
 
+//Criando tabuleiro e preenchendo com blocos brancos
 const CriaTabuleiro = () => {
-    for(l = 0; l < LINHA; l++) //ok
+    for(let l = 0; l < LINHA; l++) //ok
     {
         tabuleiro[l] = [];
-        for(c = 0; c < COLUNA; c++)
+        for(let c = 0; c < COLUNA; c++)
             {
                 tabuleiro[l][c] = VAZIO;
             }
     }
 };
-
 CriaTabuleiro();
-
 
 class Peca
 {
@@ -36,11 +34,11 @@ class Peca
         this.posicaoDaPeca = 0;
         this.pecaAtiva = this.tetromino[this.posicaoDaPeca];
         this.x = Math.floor(COLUNA / 2) - 1;
-        this.y = LINHA - 1
+        this.y = LINHA - 1;
     }
 
 
-    draw = function () 
+    draw = function()
     {
         this.fill(this.cor);
     };
@@ -48,10 +46,6 @@ class Peca
 
 
 }
-
-
-//Criando tabuleiro e preenchendo com blocos brancos
-
 
 /*
     ******************************************************************
@@ -90,20 +84,6 @@ function pecaAleatoria()
 
 let p = pecaAleatoria();
 
-
-// Funcao que desenha o tetromino no painel do jogo
-/*function Piece(tetromino, color)
-{
-    this.tetromino = tetromino;
-    this.color = color;
-    this.tetrominoN = 0;
-    this.activeTetromino = this.tetromino[this.tetrominoN];
-
-    this.x = Math.floor(COLUNA / 2) - 1;
-    this.y = LINHA - 1;
-
-};*/
-
 // Prototipo = Acrescenta uma informacao (funcao) em uma outra funcao
 // Funcao que preenche o tetromino
 Peca.prototype.fill = function(color)
@@ -138,7 +118,7 @@ Peca.prototype.unDraw = function()
  */
 
 // Funcao que movimenta tetromino para CIMA
-Peca.prototype.moveDown = function () 
+Peca.prototype.moveDown = function ()
 {
     if(!this.collision(0, -1, this.pecaAtiva))
     {
@@ -165,7 +145,7 @@ Peca.prototype.moveLeft = function()
     }
 
 };
- 
+
 // Funcao que movimenta tetromino para direita
 Peca.prototype.moveRight = function()
 {
@@ -250,7 +230,6 @@ Peca.prototype.collision = function(x, y, peca)
             {
                 return true;
             }
-
         }
     }
     return false;
@@ -288,7 +267,7 @@ Peca.prototype.lock = function()
         {
             // linhaCompleta = 1;
             // tabuleiro[l][c] != VAZIO --> 0 se qudrado esta vazio; 1 se quadrado esta completo
-            // 1 * 1 = true 
+            // 1 * 1 = true
             // 1 * 0 = false
             linhaCompleta = (linhaCompleta && (tabuleiro[l][c] !== VAZIO));
             console.log(linhaCompleta)
@@ -381,5 +360,26 @@ var Tabuleiro  = {
 };
 
 Tabuleiro.desenhar();
-
 drop();
+
+
+function redimensionarJogo() {
+    if(canvas.offsetWidth == "204" && canvas.offsetHeight == "404"){
+        alert("Tem certeza que deseja redimensionar o jogo para que fique MENOR?");
+        //iniciarJogo();
+        canvas.height = "200";
+        canvas.width = "100";
+        LINHA = Math.floor(canvas.height / AREA_BLOCO);
+        COLUNA = Math.floor(canvas.width / AREA_BLOCO);
+        CriaTabuleiro();
+        Tabuleiro.desenhar();
+    } else {
+        alert("Tem certeza que deseja redimensionar o jogo para que fique MAIOR?");
+        canvas.height = "400";
+        canvas.width = "200";
+        LINHA = Math.floor(canvas.height / AREA_BLOCO);
+        COLUNA = Math.floor(canvas.width / AREA_BLOCO);
+        CriaTabuleiro();
+        Tabuleiro.desenhar();
+    }
+}
