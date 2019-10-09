@@ -1,5 +1,6 @@
 let SCORE = document.getElementById('score');
 let deletedLINES = document.getElementById('deletedLines');
+let TIME = document.getElementById('time');
 
 const canvas = document.getElementById('tela');
 let largura = canvas.offsetWidth - 4; // - 4 exclui os dois pixel de borda de cada lado
@@ -13,6 +14,69 @@ const VAZIO = "BLACK"; // Cor de fundo do canvas
 
 let tabuleiro = [];
 
+let gameOver = false;
+let score = 0;
+let deadLINES = 0;
+
+let controle = 0;
+
+let p; //objeto peca
+
+function pausar()
+{
+    if(controle >= 1)
+    {
+        alert("Jogo Pausado!");
+    }
+}
+
+function reiniciar()
+{
+    if(controle >= 1)
+    {
+        var opcao = confirm("Deseja reiniciar o jogo?");
+        if(opcao !== true)
+        {
+            var opcao2 = confirm("Recarregar pagina?");
+            if(opcao2 !== true)
+            {
+
+            } else
+            {
+                location.reload();
+            }
+        } else
+        {
+            iniciar();
+        }
+    }
+}
+
+function fimJogo()
+{
+    gameOver = true;
+    reiniciar();
+}
+
+function iniciar()
+{
+    controle++;
+
+    CriaTabuleiro();
+    p = pecaAleatoria();
+    Tabuleiro.desenhar();
+    drop();
+
+
+    gameOver = false;
+    score = 0;
+    deadLINES = 0;
+    SCORE.innerHTML = score;
+    deletedLINES.innerHTML = deadLINES;
+}
+
+
+
 //Criando tabuleiro e preenchendo com blocos brancos
 const CriaTabuleiro = () =>
 {
@@ -25,8 +89,10 @@ const CriaTabuleiro = () =>
         }
     }
 };
-CriaTabuleiro();
+//CriaTabuleiro();
 
+
+// Classe peca, possui funcoes de: desenhar, apagar, preencher, movimentos e trava
 class Peca
 {
     constructor(tetromino, cor)
@@ -40,17 +106,17 @@ class Peca
     }
 
 
-    draw = () =>
+    desenhar = () =>
     {
-        this.fill(this.cor);
+        this.preencher(this.cor);
     };
 
-    unDraw = () =>
+    apagar = () =>
     {
-        this.fill(VAZIO);
+        this.preencher(VAZIO);
     };
 
-    fill = (cor) =>
+    preencher = (cor) =>
     {
         for (let l = 0; l < this.pecaAtiva.length; l++)
         {
@@ -62,16 +128,16 @@ class Peca
                 }
             }
         }
-    }
+    };
 
 
-    moveDown = () =>
+    moveUp = () =>
     {
         if (!this.collision(0, -1, this.pecaAtiva))
         {
-            this.unDraw();
+            this.apagar();
             this.y--;
-            this.draw();
+            this.desenhar();
         }
         // Quando colidir, deve "travar" e gerar nova peca!
         else
@@ -84,9 +150,9 @@ class Peca
     {
         if (!this.collision(-1, 0, this.pecaAtiva))
         {
-            this.unDraw();
+            this.apagar();
             this.x--;
-            this.draw();
+            this.desenhar();
         }
     };
 
@@ -94,9 +160,9 @@ class Peca
     {
         if (!this.collision(1, 0, this.pecaAtiva))
         {
-            this.unDraw();
+            this.apagar();
             this.x++;
-            this.draw();
+            this.desenhar();
         }
     };
     collision = (x, y, peca) =>
@@ -152,7 +218,7 @@ class Peca
                 {
                     alert("Game Over Baby!");
                     // Parar a funcao "requestAnimationFrame(drop);"
-                    gameOver = true;
+                    fimJogo();
                     break;
                 }
                 tabuleiro[this.y + l][this.x + c] = this.cor;
@@ -201,38 +267,38 @@ class Peca
     rotate = () =>
     {
         // Criar ciclo de 0 a 3, impedindo a chamada de uma peca que nao exista!
-        let nextPattern = this.tetromino[(this.posicaoDaPeca + 1) % this.tetromino.length];
-        let kick = 0;
+        let proximoModelo = this.tetromino[(this.posicaoDaPeca + 1) % this.tetromino.length];
+        let ajuste = 0;
 
         // Condicao que permite a rotacao perto da parede
-        if (this.collision(0, 0, nextPattern))
+        if (this.collision(0, 0, proximoModelo))
         {
             // Se o X for maior que a metade do numero de colunas,
             //estamos na parede da direta!
             if (this.x > COLUNA / 2)
             {
                 // Parede da direita
-                // kick = -1 move o tetromino para eAREA_BLOCOuerda
-                kick = -1;
+                // ajuste = -1 move o tetromino para eAREA_BLOCOuerda
+                ajuste = -1;
             }
             // Se o X for menor que a metade do numero de colunas,
             //estamos na parede da eAREA_BLOCOuerda!
             else
             {
                 // Parede da eAREA_BLOCOuerda
-                // kick = 1 move o tetromino para direita
-                kick = 1;
+                // ajuste = 1 move o tetromino para direita
+                ajuste = 1;
             }
         }
 
         //
-        if (!this.collision(kick, 0, nextPattern))
+        if (!this.collision(ajuste, 0, proximoModelo))
         {
-            this.unDraw();
-            this.x += kick;
+            this.apagar();
+            this.x += ajuste;
             this.posicaoDaPeca = (this.posicaoDaPeca + 1) % this.tetromino.length;
             this.pecaAtiva = this.tetromino[this.posicaoDaPeca];
-            this.draw();
+            this.desenhar();
         }
     };
 }
@@ -268,27 +334,14 @@ const PIECES = [
 // ++++++++++++++++++++++
 function pecaAleatoria()
 {
-    let a = (Math.floor(Math.random() * PIECES.length));
-    //Gero um numeric aleatório que vai de 0 (inclusivo) até 1 (exclusivo)
-    //Multiplico pelo tamanho do vetor de peças
+    let aleatorio = (Math.floor(Math.random() * PIECES.length));
+    // Gero um numeric aleatório que vai de 0 (inclusivo) até 1 (exclusivo)
+    // Multiplico pelo tamanho do vetor de peças
     // Arredondo para um "inteiro", pois o math.random gera um numeric qualquer (com casas decimais)
 
     //Busca um tipo de tetromino, depois pega alguma variação de sua rotação
-    return new Peca(PIECES[a][0], PIECES[a][1]);
+    return new Peca(PIECES[aleatorio][0], PIECES[aleatorio][1]);
 }
-
-let p = pecaAleatoria();
-
-
-
-
-
-
-// Funcao de colisoes
-
-
-let score = 0;
-let deadLINES = 0;
 
 
 // Variavel que obtem a tecla clicada pelo usuario
@@ -314,14 +367,12 @@ function CONTROL(event)
     }
     else if (event.key === "ArrowUp")
     {
-        p.moveDown();
+        p.moveUp();
         dropStart = Date.now();
     }
 }
 
 let dropStart = Date.now();
-let gameOver = false;
-
 //Mover a peça todo frame
 function drop()
 {
@@ -329,7 +380,7 @@ function drop()
     let delta = now - dropStart;
     if (delta > 1000)
     {
-        p.moveDown();
+        p.moveUp();
         dropStart = Date.now();
     }
     if (!gameOver)
@@ -353,10 +404,6 @@ var Tabuleiro = {
         }
     }
 };
-
-Tabuleiro.desenhar();
-drop();
-
 
 function redimensionarJogo()
 {
