@@ -1,31 +1,63 @@
 let SCORE = document.getElementById('score');
 let deletedLINES = document.getElementById('deletedLines');
 let TIME = document.getElementById('time');
+let STAGE = document.getElementById('stage');
 
 const canvas = document.getElementById('tela');
 let largura = canvas.offsetWidth - 4; // - 4 exclui os dois pixel de borda de cada lado
 let altura = canvas.offsetHeight - 4;
 const ctx = canvas.getContext('2d');
 const AREA_BLOCO = 20;
+const VELOCIDADE = 1600;
 let LINHA = Math.floor((altura) / AREA_BLOCO);
 let COLUNA = Math.floor((largura) / AREA_BLOCO);
-var dificuldadeDoJogo = 1500;
+
+var dificuldadeDoJogo = VELOCIDADE;
 var pausado = false;
 var audioLinhaCompleta = new Audio('linha.mp3');
 var audioGameOver = new Audio('gameOver.wav')
+var gameOver = false;
+var score = 0;
+var deadLINES = 0;
+var stage = 1;
+var controle = 0;
+var temporizador = 0;
+var statusContador = 0;
+var tempo;
 
 const VAZIO = "BLACK"; // Cor de fundo do canvas
 timer = NaN;
 let tabuleiro = [];
 
-let gameOver = false;
-let score = 0;
-let deadLINES = 0;
 
-var controle = 0;
 
 let p; //objeto peca
 
+function iniciar()
+{
+    iniciarContador();
+    controle++;
+
+    CriaTabuleiro();
+    p = pecaAleatoria();
+    Tabuleiro.desenhar();
+    clearInterval(timer);
+    timer = setInterval(drop, dificuldadeDoJogo)
+
+    gameOver = false;
+    score = 0;
+    deadLINES = 0;
+    stage = 1;
+    SCORE.innerHTML = score;
+    deletedLINES.innerHTML = deadLINES;
+    STAGE.innerHTML = stage;
+
+    M.toast({
+        html: 'Jogo iniciado',
+        classes: 'green darken-1 rounded'
+    });
+
+}
 
 
 function pausar()
@@ -33,6 +65,7 @@ function pausar()
     btPausarReference = document.getElementById("btPausar");
     if(!pausado)
     {
+        pausarContador();
         btPausarReference.innerHTML = "Continuar";
         M.toast({
         html: 'Jogo pausado para DEBUG',
@@ -42,21 +75,19 @@ function pausar()
     }
     else
     {
+        iniciarContador();
         btPausarReference.innerHTML = "Pausar"
         pausado = false;
     }
-    if(controle >= 1)
-    {
-        //alert("Esse e um pause para DEBUG, voce podera mover e rotacionar a peça ativa, porem o jogo estara pausado.");
-    }
 }
-
 
 
 function reiniciar()
 {
     if(controle >= 1)
     {
+        dificuldadeDoJogo = VELOCIDADE;
+        resetarContador();
         var opcao = confirm("Deseja reiniciar o jogo?");
         if(opcao !== true)
         {
@@ -79,31 +110,37 @@ function fimJogo()
 {
     gameOver = true;
     clearInterval(timer);
+    resetarContador();
     reiniciar();
 }
 
-function iniciar()
-{
-    controle++;
 
-    CriaTabuleiro();
-    p = pecaAleatoria();
-    Tabuleiro.desenhar();
-    clearInterval(timer);
-    timer = setInterval(drop, dificuldadeDoJogo)
 
-    gameOver = false;
-    score = 0;
-    deadLINES = 0;
-    SCORE.innerHTML = score;
-    deletedLINES.innerHTML = deadLINES;
-
-    M.toast({
-    html: 'Jogo iniciado',
-    classes: 'green darken-1 rounded'
-    });
-
+function contadorTempo() {
+    TIME.innerHTML = temporizador;
+    tempo = setTimeout(contadorTempo, 1000);
+    temporizador++;
 }
+
+function iniciarContador() {
+    if (!statusContador) {
+        statusContador = 1;
+        contadorTempo();
+    }
+}
+
+function pausarContador() {
+    clearTimeout(tempo);
+    statusContador = 0;
+}
+
+function resetarContador() {
+    clearTimeout(tempo);
+    temporizador = 0;
+    statusContador = 0;
+}
+
+
 
 
 
@@ -298,8 +335,12 @@ class Peca
                 }
                 score += 10;
                 deadLINES += 1;
-                dificuldadeDoJogo -= 100
-                M.toast({html: 'DIFICULDADE AUMENTADA!!',classes: 'red darken-1 rounded'})
+                dificuldadeDoJogo -= 40
+                if(deadLINES == 5 || deadLINES == 10 || deadLINES == 15 || deadLINES == 20 || deadLINES == 25 || deadLINES == 30 || deadLINES == 35 || deadLINES == 40)
+                {
+                    stage +=1;
+                    M.toast({html: 'DIFICULDADE AUMENTADA!!',classes: 'red darken-1 rounded'})
+                }
                 clearInterval(timer);
                 timer = setInterval(drop, dificuldadeDoJogo)
                 audioLinhaCompleta.play();
@@ -311,6 +352,7 @@ class Peca
         // Atualizar Informacoes
         SCORE.innerHTML = score;
         deletedLINES.innerHTML = deadLINES;
+        STAGE.innerHTML = stage;
     };
 
     rotate = () =>
