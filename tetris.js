@@ -1,7 +1,7 @@
-let SCORE = document.getElementById('score');
-let deletedLINES = document.getElementById('deletedLines');
+let PLACAR = document.getElementById('score');
+let LINHASAPAGADAS = document.getElementById('deletedLines');
 let TIME = document.getElementById('time');
-let STAGE = document.getElementById('stage');
+let NIVEL = document.getElementById('stage');
 let RANK = document.getElementById('rankingJogador');
 
 const canvas = document.getElementById('tela');
@@ -18,9 +18,9 @@ var pausado = false;
 var audioLinhaCompleta = new Audio('linha.mp3');
 var audioGameOver = new Audio('gameOver.wav')
 var gameOver = false;
-var score = 0;
-var deadLINES = 0;
-var stage = 1;
+var pontos = 0;
+var linhasDeletadas = 0;
+var nivel = 1;
 var controle = 0;
 var temporizador = 0;
 var statusContador = 0;
@@ -47,12 +47,12 @@ function iniciar() {
     timer = setInterval(drop, dificuldadeDoJogo)
 
     gameOver = false;
-    score = 0;
-    deadLINES = 0;
-    stage = 1;
-    SCORE.innerHTML = score;
-    deletedLINES.innerHTML = deadLINES;
-    STAGE.innerHTML = stage;
+    pontos = 0;
+    linhasDeletadas = 0;
+    nivel = 1;
+    PLACAR.innerHTML = pontos;
+    LINHASAPAGADAS.innerHTML = linhasDeletadas;
+    NIVEL.innerHTML = nivel;
 
     M.toast({
         html: 'Jogo iniciado',
@@ -108,10 +108,10 @@ function attRanking() {
 
         var dadosJogador = {
             'NOME': nome,
-            'PONTOS': score,
-            'NIVEL': stage,
+            'PONTOS': pontos,
+            'NIVEL': nivel,
             'TEMPO': temporizador,
-            'LINHAS': deadLINES
+            'LINHAS': linhasDeletadas
         }
         dadosRanking.push(dadosJogador);
 
@@ -270,6 +270,8 @@ class Peca {
 
 
     removerLinha = () => {
+        let contador = 0;
+        let bonus = 0;
         for (let l = LINHA - 1; l >= 0; l--) {
             let linhaCompleta = true;
             for (let c = COLUNA - 1; c >= 0; c--) {
@@ -280,6 +282,7 @@ class Peca {
                 linhaCompleta = (linhaCompleta && (tabuleiro[l][c] !== VAZIO));
             }
             if (linhaCompleta) {
+                contador++;
                 // "j" deve receber "l" para remover somente a linha que está cheia
                 for (let j = l; j < LINHA - 1; j++) {
                     for (let i = 0; i < COLUNA; i++) {
@@ -289,29 +292,50 @@ class Peca {
                 for (let i = 0; i < COLUNA; i++) {
                     tabuleiro[LINHA - 1][i] = VAZIO;
                 }
-                score += 10;
-                deadLINES += 1;
+
+                linhasDeletadas += 1;
                 dificuldadeDoJogo -= 40;
-                if (deadLINES == 5 || deadLINES == 10 || deadLINES == 15 || deadLINES == 20 || deadLINES == 25 || deadLINES == 30 || deadLINES == 35 || deadLINES == 40) {
-                    stage += 1;
+                if (linhasDeletadas == 5 || linhasDeletadas == 10 || linhasDeletadas == 15 || linhasDeletadas == 20 || linhasDeletadas == 25 || linhasDeletadas == 30 || linhasDeletadas == 35 || linhasDeletadas == 40) {
+                    nivel += 1;
                     M.toast({
                         html: 'DIFICULDADE AUMENTADA!!',
                         classes: 'red darken-1 rounded'
                     })
                 }
+
                 clearInterval(timer);
                 timer = setInterval(drop, dificuldadeDoJogo);
                 audioLinhaCompleta.play();
             }
         }
 
+        switch (contador) {
+            case 1:
+                bonus = 10;
+                pontos += bonus;
+                break;
+            case 2:
+                bonus = 40;
+                pontos += bonus;
+                break;
+            case 3:
+                bonus = 90;
+                pontos += bonus;
+                break;
+            case 4:
+                bonus = 160;
+                pontos += bonus;
+                break;
+        }
+
         // Atualizar tabuleiro
         Tabuleiro.desenhar();
         // Atualizar Informacoes
-        SCORE.innerHTML = score;
-        deletedLINES.innerHTML = deadLINES;
-        STAGE.innerHTML = stage;
+        PLACAR.innerHTML = pontos;
+        LINHASAPAGADAS.innerHTML = linhasDeletadas;
+        NIVEL.innerHTML = nivel;
     };
+
 
     collision = (x, y, peca) => {
         for (let l = 0; l < peca.length; l++) {
@@ -335,7 +359,6 @@ class Peca {
                     continue;
                 }
                 // Condicao que checa se JA HA um quadrado de um tetromino na posicao seguinte (apos o movimento)
-                //25 24
                 if (tabuleiro[proxY][proxX] !== VAZIO) {
                     return true;
                 }
@@ -504,4 +527,4 @@ function redimensionarJogo() {
         Tabuleiro.desenhar();
     }
 
-}
+};
