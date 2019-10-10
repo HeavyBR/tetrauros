@@ -2,6 +2,11 @@
 <html lang="pt">
 <head>
     <title>JS - Tetrauros</title>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <link rel="stylesheet" href="styles.css" type="text/css">
     <style>
         @import url('https://fonts.googleapis.com/css?family=Black+Ops+One|Press+Start+2P|Saira+Stencil+One&display=swap');
@@ -9,7 +14,7 @@
 </head>
 <body>
 <div class="corpo">
-    <table>
+    <table >
         <tr>
             <th colspan="3">
                 <h1 id="titulo">
@@ -42,9 +47,9 @@
         </tr>
         <tr>
             <td colspan="3" id="opcoes">
-                <button class="normal" id="btIniciar" onclick="iniciar()" type="button">Iniciar</button>
-                <button class="normal" type="button" onclick="reiniciar()" id="btNovo">Reiniciar</button>
-                <button class="normal" type="button" onclick="pausar()" id="btPausar">Pausar</button>
+                <button class="normal"  class="z-depth-2" id="btIniciar" onclick="iniciar()" type="button">Iniciar</button>
+                <button class="normal" class="z-depth-2" type="button" onclick="reiniciar()" id="btNovo">Reiniciar</button>
+                <button class="normal" type="button"  onclick="pausar()" id="btPausar">Pausar</button>
                 <br/>
                 <button class="grande" type="button" onclick="redimensionarJogo()" id="btRedimensionar">Redimensionar Jogo</button>
             </td>
@@ -54,4 +59,5 @@
     <script src="pedras.js"></script>
     <script src="tetris.js"></script>
 </body>
+
 </html>

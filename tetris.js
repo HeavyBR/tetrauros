@@ -9,26 +9,49 @@ const ctx = canvas.getContext('2d');
 const AREA_BLOCO = 20;
 let LINHA = Math.floor((altura) / AREA_BLOCO);
 let COLUNA = Math.floor((largura) / AREA_BLOCO);
+var dificuldadeDoJogo = 1500;
+var pausado = false;
+var audioLinhaCompleta = new Audio('linha.mp3');
+var audioGameOver = new Audio('gameOver.wav')
 
 const VAZIO = "BLACK"; // Cor de fundo do canvas
-
+timer = NaN;
 let tabuleiro = [];
 
 let gameOver = false;
 let score = 0;
 let deadLINES = 0;
 
-let controle = 0;
+var controle = 0;
 
 let p; //objeto peca
 
+
+
 function pausar()
 {
+    btPausarReference = document.getElementById("btPausar");
+    if(!pausado)
+    {
+        btPausarReference.innerHTML = "Continuar";
+        M.toast({
+        html: 'Jogo pausado para DEBUG',
+        classes: 'purple darken-1 rounded'
+        });
+        pausado = true;
+    }
+    else
+    {
+        btPausarReference.innerHTML = "Pausar"
+        pausado = false;
+    }
     if(controle >= 1)
     {
-        alert("Jogo Pausado!");
+        //alert("Esse e um pause para DEBUG, voce podera mover e rotacionar a peça ativa, porem o jogo estara pausado.");
     }
 }
+
+
 
 function reiniciar()
 {
@@ -55,6 +78,7 @@ function reiniciar()
 function fimJogo()
 {
     gameOver = true;
+    clearInterval(timer);
     reiniciar();
 }
 
@@ -65,14 +89,20 @@ function iniciar()
     CriaTabuleiro();
     p = pecaAleatoria();
     Tabuleiro.desenhar();
-    drop();
-
+    clearInterval(timer);
+    timer = setInterval(drop, dificuldadeDoJogo)
 
     gameOver = false;
     score = 0;
     deadLINES = 0;
     SCORE.innerHTML = score;
     deletedLINES.innerHTML = deadLINES;
+
+    M.toast({
+    html: 'Jogo iniciado',
+    classes: 'green darken-1 rounded'
+    });
+
 }
 
 
@@ -90,6 +120,16 @@ const CriaTabuleiro = () =>
     }
 };
 //CriaTabuleiro();
+
+
+//Mover a peça todo frame
+function drop()
+{
+    if(!pausado)
+    {
+         p.moveUp();
+    }
+}
 
 
 // Classe peca, possui funcoes de: desenhar, apagar, preencher, movimentos e trava
@@ -216,8 +256,14 @@ class Peca
                 // Peca passar a borda inferior - GAME OVER!
                 if (this.y + l > LINHA - 1) //ESSA
                 {
-                    alert("Game Over Baby!");
+                    audioGameOver.play();
+                    M.toast({
+                    html: 'Game Over',
+                    classes: 'whitedarken-1 rounded'
+                    });
+
                     // Parar a funcao "requestAnimationFrame(drop);"
+
                     fimJogo();
                     break;
                 }
@@ -235,7 +281,6 @@ class Peca
                 // 1 * 1 = true
                 // 1 * 0 = false
                 linhaCompleta = (linhaCompleta && (tabuleiro[l][c] !== VAZIO));
-                console.log(linhaCompleta)
             }
             if (linhaCompleta)
             {
@@ -253,7 +298,11 @@ class Peca
                 }
                 score += 10;
                 deadLINES += 1;
-
+                dificuldadeDoJogo -= 100
+                M.toast({html: 'DIFICULDADE AUMENTADA!!',classes: 'red darken-1 rounded'})
+                clearInterval(timer);
+                timer = setInterval(drop, dificuldadeDoJogo)
+                audioLinhaCompleta.play();
             }
         }
 
@@ -372,25 +421,6 @@ function CONTROL(event)
     }
 }
 
-let dropStart = Date.now();
-//Mover a peça todo frame
-function drop()
-{
-    let now = Date.now();
-    let delta = now - dropStart;
-    if (delta > 1000)
-    {
-        p.moveUp();
-        dropStart = Date.now();
-    }
-    if (!gameOver)
-    {
-        requestAnimationFrame(drop);
-    }
-}
-
-
-
 // Funcao que desenha o painel de jogo
 var Tabuleiro = {
     desenhar: function ()
@@ -428,4 +458,6 @@ function redimensionarJogo()
         CriaTabuleiro();
         Tabuleiro.desenhar();
     }
+
 }
+
