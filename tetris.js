@@ -2,6 +2,7 @@ let SCORE = document.getElementById('score');
 let deletedLINES = document.getElementById('deletedLines');
 let TIME = document.getElementById('time');
 let STAGE = document.getElementById('stage');
+let RANK = document.getElementById('rankingJogador');
 
 const canvas = document.getElementById('tela');
 let largura = canvas.offsetWidth - 4; // - 4 exclui os dois pixel de borda de cada lado
@@ -23,11 +24,12 @@ var stage = 1;
 var controle = 0;
 var temporizador = 0;
 var statusContador = 0;
-var jogoIniciado = false;
 var tempo;
 
 const VAZIO = "BLACK"; // Cor de fundo do canvas
 timer = NaN;
+
+let dadosRanking = [];
 let tabuleiro = [];
 
 
@@ -96,13 +98,57 @@ function reiniciar() {
     }
 }
 
+
+function attRanking() {
+    if (gameOver) {
+        var nome = prompt("Entre com seu nome", "Jogador...")
+        if (nome == null || nome == "Jogador...") {
+            nome = "Sem nome";
+        }
+
+        var dadosJogador = {
+            'NOME': nome,
+            'PONTOS': score,
+            'NIVEL': stage,
+            'TEMPO': temporizador,
+            'LINHAS': deadLINES
+        }
+        dadosRanking.push(dadosJogador);
+
+        dadosRanking.sort(function(a, b) {
+            if (a.PONTOS < b.PONTOS) {
+                return 1
+            };
+            if (a.PONTOS > b.PONTOS) {
+                return -1
+            };
+            return 0;
+        });
+
+        let tamanho = dadosRanking.length;
+        RANK = "Jogador | Pontos | Nivel | Tempo | Linhas" + "<br/><br/>";
+
+        for (let i = 0; i < tamanho; i++) {
+            RANK += "0" + i + ". ";
+            RANK += dadosRanking[i].NOME + "  |  ";
+            RANK += dadosRanking[i].PONTOS + "  |  ";
+            RANK += dadosRanking[i].NIVEL + "  |  ";
+            RANK += dadosRanking[i].TEMPO + "  |  ";
+            RANK += dadosRanking[i].LINHAS;
+            RANK += "<br/>";
+        }
+
+        document.getElementById("rankingJogador").innerHTML = RANK;
+    }
+}
+
 function fimJogo() {
     gameOver = true;
+    attRanking();
     clearInterval(timer);
     resetarContador();
     reiniciar();
 }
-
 
 
 function contadorTempo() {
@@ -148,7 +194,7 @@ const CriaTabuleiro = () => {
 //Mover a peça todo frame
 function drop() {
     if (!pausado) {
-        p.moveUp();
+        p.moverCima();
     }
 }
 
@@ -183,7 +229,7 @@ class Peca {
         }
     };
 
-    moveDown = () => {
+    moverBaixo = () => {
         if (!this.collision(0, 1, this.pecaAtiva)) {
             this.apagar();
             this.y++;
@@ -191,7 +237,7 @@ class Peca {
         }
     };
 
-    moveUp = () => {
+    moverCima = () => {
         if (!this.collision(0, -1, this.pecaAtiva)) {
             this.apagar();
             this.y--;
@@ -206,7 +252,7 @@ class Peca {
 
         }
     };
-    moveLeft = () => {
+    moverEsquerda = () => {
         if (!this.collision(-1, 0, this.pecaAtiva)) {
             this.apagar();
             this.x--;
@@ -214,7 +260,7 @@ class Peca {
         }
     };
 
-    moveRight = () => {
+    moverDireita = () => {
         if (!this.collision(1, 0, this.pecaAtiva)) {
             this.apagar();
             this.x++;
@@ -245,7 +291,7 @@ class Peca {
                 }
                 score += 10;
                 deadLINES += 1;
-                dificuldadeDoJogo -= 40
+                dificuldadeDoJogo -= 40;
                 if (deadLINES == 5 || deadLINES == 10 || deadLINES == 15 || deadLINES == 20 || deadLINES == 25 || deadLINES == 30 || deadLINES == 35 || deadLINES == 40) {
                     stage += 1;
                     M.toast({
@@ -254,7 +300,7 @@ class Peca {
                     })
                 }
                 clearInterval(timer);
-                timer = setInterval(drop, dificuldadeDoJogo)
+                timer = setInterval(drop, dificuldadeDoJogo);
                 audioLinhaCompleta.play();
             }
         }
@@ -404,23 +450,23 @@ document.addEventListener("keydown", CONTROL);
 function CONTROL(event) {
     if (!pausado) {
         if (event.key === "ArrowLeft") {
-            p.moveLeft();
+            p.moverEsquerda();
         } else if (event.key === "ArrowDown") {
             p.rotate();
         } else if (event.key === "ArrowRight") {
-            p.moveRight();
+            p.moverDireita();
         } else if (event.key === "ArrowUp") {
-            p.moveUp();
+            p.moverCima();
         }
     } else {
         if (event.key === "a") {
-            p.moveLeft();
+            p.moverEsquerda();
         } else if (event.key === "s") {
-            p.moveDown();
+            p.moverBaixo();
         } else if (event.key === "d") {
-            p.moveRight();
+            p.moverDireita();
         } else if (event.key === "w") {
-            p.moveUp();
+            p.moverCima();
         } else if (event.code === "Space") {
             p.rotate();
         }
