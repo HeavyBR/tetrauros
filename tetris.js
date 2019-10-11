@@ -5,6 +5,8 @@ let NIVEL = document.getElementById('stage');
 let RANK = document.getElementById('rankingJogador');
 
 const canvas = document.getElementById('tela');
+const canvasNextPiece = document.getElementById('CanvasNextPiece');
+const ctxNextPiece = canvasNextPiece.getContext('2d');
 let largura = canvas.offsetWidth - 4; // - 4 exclui os dois pixel de borda de cada lado
 let altura = canvas.offsetHeight - 4;
 const ctx = canvas.getContext('2d');
@@ -12,7 +14,8 @@ const AREA_BLOCO = 20;
 const VELOCIDADE = 1600;
 let LINHA = Math.floor((altura) / AREA_BLOCO);
 let COLUNA = Math.floor((largura) / AREA_BLOCO);
-
+const LINHANEXTPIECE = 10;
+const COLUNANEXTPIECE = 10;
 var dificuldadeDoJogo = VELOCIDADE;
 var pausado = false;
 var audioLinhaCompleta = new Audio('linha.mp3');
@@ -25,7 +28,7 @@ var controle = 0;
 var temporizador = 0;
 var statusContador = 0;
 var tempo;
-
+var nextP = undefined;
 const VAZIO = "BLACK"; // Cor de fundo do canvas
 timer = NaN;
 
@@ -42,7 +45,10 @@ function iniciar() {
 
     CriaTabuleiro();
     p = pecaAleatoria();
-    Tabuleiro.desenhar();
+    nextP = pecaAleatoria();
+
+    Tabuleiro.desenhar(LINHA, COLUNA, ctx);
+    Tabuleiro.desenhar(LINHANEXTPIECE, COLUNANEXTPIECE, ctxNextPiece);
     clearInterval(timer);
     timer = setInterval(drop, dificuldadeDoJogo)
 
@@ -58,6 +64,8 @@ function iniciar() {
         html: 'Jogo iniciado',
         classes: 'green darken-1 rounded'
     });
+    nextP.desenhar(ctxNextPiece);
+
 
 }
 
@@ -139,6 +147,10 @@ function attRanking() {
         }
 
         document.getElementById("rankingJogador").innerHTML = RANK;
+        M.toast({
+            html: 'Você está no RANKING!',
+            classes: 'cyan rounded'
+        });
     }
 }
 
@@ -211,19 +223,28 @@ class Peca {
     }
 
 
-    desenhar = () => {
-        this.preencher(this.cor);
+    desenhar = (ctx) => {
+        this.preencher(this.cor, ctx);
     };
 
-    apagar = () => {
-        this.preencher(VAZIO);
+    apagar = (ctx) => {
+        this.preencher(VAZIO, ctx);
     };
 
-    preencher = (cor) => {
+    preencher = (cor, ctx) => {
+        if (ctx === ctxNextPiece) {
+            Tabuleiro.limpaCanvas(LINHANEXTPIECE, COLUNANEXTPIECE, ctxNextPiece);
+        }
         for (let l = 0; l < this.pecaAtiva.length; l++) {
             for (let c = 0; c < this.pecaAtiva.length; c++) {
-                if (this.pecaAtiva[l][c]) {
-                    desenharBloco(c + this.x, l + this.y, cor);
+                if (ctx !== ctxNextPiece) {
+                    if (this.pecaAtiva[l][c]) {
+                        desenharBloco(c + this.x, l + this.y, cor, ctx);
+                    }
+                } else {
+                    if (this.pecaAtiva[l][c]) {
+                        desenharBloco(c, l, cor, ctx);
+                    }
                 }
             }
         }
@@ -231,40 +252,43 @@ class Peca {
 
     moverBaixo = () => {
         if (!this.collision(0, 1, this.pecaAtiva)) {
-            this.apagar();
+            this.apagar(ctx);
             this.y++;
-            this.desenhar();
+            this.desenhar(ctx);
         }
     };
 
     moverCima = () => {
         if (!this.collision(0, -1, this.pecaAtiva)) {
-            this.apagar();
+            this.apagar(ctx);
             this.y--;
-            this.desenhar();
+            this.desenhar(ctx);
         }
         // Quando colidir, deve "travar" e gerar nova peca!
         else {
             if (!pausado) {
                 this.lock();
-                p = pecaAleatoria();
+                p = nextP;
+                nextP.apagar(ctxNextPiece);
+                nextP = pecaAleatoria();
+                nextP.desenhar(ctxNextPiece);
             }
 
         }
     };
     moverEsquerda = () => {
         if (!this.collision(-1, 0, this.pecaAtiva)) {
-            this.apagar();
+            this.apagar(ctx);
             this.x--;
-            this.desenhar();
+            this.desenhar(ctx);
         }
     };
 
     moverDireita = () => {
         if (!this.collision(1, 0, this.pecaAtiva)) {
-            this.apagar();
+            this.apagar(ctx);
             this.x++;
-            this.desenhar();
+            this.desenhar(ctx);
         }
     };
 
@@ -329,7 +353,7 @@ class Peca {
         }
 
         // Atualizar tabuleiro
-        Tabuleiro.desenhar();
+        Tabuleiro.desenhar(LINHA, COLUNA, ctx);
         // Atualizar Informacoes
         PLACAR.innerHTML = pontos;
         LINHASAPAGADAS.innerHTML = linhasDeletadas;
@@ -371,27 +395,28 @@ class Peca {
         for (let l = 0; l < this.pecaAtiva.length; l++) {
             for (let c = 0; c < this.pecaAtiva.length; c++) {
                 // Pular os quadrados vazios
-                if (!this.pecaAtiva[l][c]) {
-                    continue;
-                }
-                // Peca passar a borda inferior - GAME OVER!
-                if (this.y + l > LINHA - 1) //ESSA
-                {
-                    audioGameOver.play();
-                    M.toast({
-                        html: 'Game Over',
-                        classes: 'whitedarken-1 rounded'
-                    });
+                if (this.pecaAtiva[l][c]) {
+                    // Peca passar a borda inferior - GAME OVER!
+                    if (this.y + l > LINHA - 1) //ESSA
+                    {
+                        audioGameOver.play();
+                        M.toast({
+                            html: 'Game Over',
+                            classes: 'whitedarken-1 rounded'
+                        });
 
-                    fimJogo();
-                    break;
+                        fimJogo();
+                        break;
+                    }
+                    tabuleiro[this.y + l][this.x + c] = this.cor;
                 }
-                tabuleiro[this.y + l][this.x + c] = this.cor;
             }
+
         }
         // Remover linhas completas
         this.removerLinha();
     };
+
 
     rotate = () => {
         // Criar ciclo de 0 a 3, impedindo a chamada de uma peca que nao exista!
@@ -418,11 +443,11 @@ class Peca {
 
         //
         if (!this.collision(ajuste, 0, proximoModelo)) {
-            this.apagar();
+            this.apagar(ctx);
             this.x += ajuste;
             this.posicaoDaPeca = (this.posicaoDaPeca + 1) % this.tetromino.length;
             this.pecaAtiva = this.tetromino[this.posicaoDaPeca];
-            this.desenhar();
+            this.desenhar(ctx);
         }
     };
 }
@@ -435,7 +460,7 @@ class Peca {
 
 
 // Funcao que desenha o quadrado do tetromino
-function desenharBloco(x, y, color) {
+function desenharBloco(x, y, color, ctx) {
     ctx.fillStyle = color;
     ctx.fillRect(x * AREA_BLOCO, y * AREA_BLOCO, AREA_BLOCO, AREA_BLOCO);
     ctx.strokeStyle = "#141414"; // Cor das linhas do canvas
@@ -457,6 +482,7 @@ const PIECES = [
 // ++++++++++++++++++++++
 function pecaAleatoria() {
     let aleatorio = (Math.floor(Math.random() * PIECES.length));
+    console.log("Numero gerado: " + aleatorio);
     // Gero um numeric aleatório que vai de 0 (inclusivo) até 1 (exclusivo)
     // Multiplico pelo tamanho do vetor de peças
     // Arredondo para um "inteiro", pois o math.random gera um numeric qualquer (com casas decimais)
@@ -498,10 +524,18 @@ function CONTROL(event) {
 
 // Funcao que desenha o painel de jogo
 var Tabuleiro = {
-    desenhar: function() {
+    desenhar: function (LINHA, COLUNA, ctx) {
         for (let l = 0; l < LINHA; l++) {
             for (let c = 0; c < COLUNA; c++) {
-                desenharBloco(c, l, tabuleiro[l][c]);
+                desenharBloco(c, l, tabuleiro[l][c], ctx);
+            }
+        }
+    },
+
+    limpaCanvas: (tLinha, tColuna, ctx) => {
+        for (var n = 0; n < tLinha; n++) {
+            for (let j = 0; j < tColuna; j++) {
+                desenharBloco(j, n, VAZIO, ctx);
             }
         }
     }
@@ -516,7 +550,7 @@ function redimensionarJogo() {
         LINHA = Math.floor(canvas.height / AREA_BLOCO);
         COLUNA = Math.floor(canvas.width / AREA_BLOCO);
         CriaTabuleiro();
-        Tabuleiro.desenhar();
+        Tabuleiro.desenhar(LINHA, COLUNA, ctx);
     } else {
         alert("Tem certeza que deseja redimensionar o jogo para que fique MAIOR?");
         canvas.height = "400";
@@ -524,7 +558,8 @@ function redimensionarJogo() {
         LINHA = Math.floor(canvas.height / AREA_BLOCO);
         COLUNA = Math.floor(canvas.width / AREA_BLOCO);
         CriaTabuleiro();
-        Tabuleiro.desenhar();
+        Tabuleiro.desenhar(LINHA, COLUNA, ctx);
     }
 
 };
+
