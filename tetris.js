@@ -7,15 +7,16 @@ let RANK = document.getElementById('rankingJogador');
 const canvas = document.getElementById('tela');
 const canvasNextPiece = document.getElementById('CanvasNextPiece');
 const ctxNextPiece = canvasNextPiece.getContext('2d');
-let largura = canvas.offsetWidth - 4; // - 4 exclui os dois pixel de borda de cada lado
-let altura = canvas.offsetHeight - 4;
 const ctx = canvas.getContext('2d');
-const AREA_BLOCO = 20;
+AREA_BLOCO = 20;
 const VELOCIDADE = 1600;
-let LINHA = Math.floor((altura) / AREA_BLOCO);
-let COLUNA = Math.floor((largura) / AREA_BLOCO);
-const LINHANEXTPIECE = 10;
-const COLUNANEXTPIECE = 10;
+
+LINHA = Math.floor(canvas.height / AREA_BLOCO);
+COLUNA = Math.floor(canvas.width / AREA_BLOCO);
+
+LINHANEXTPIECE = Math.floor(canvas.height / AREA_BLOCO);
+COLUNANEXTPIECE = Math.floor(canvas.width / AREA_BLOCO);
+
 var dificuldadeDoJogo = VELOCIDADE;
 var pausado = false;
 var audioLinhaCompleta = new Audio('linha.mp3');
@@ -25,9 +26,11 @@ var pontos = 0;
 var linhasDeletadas = 0;
 var nivel = 1;
 var controle = 0;
+var controle2 = 1;
 var temporizador = 0;
 var statusContador = 0;
 var tempo;
+var p = undefined; //objeto peca
 var nextP = undefined;
 const VAZIO = "BLACK"; // Cor de fundo do canvas
 timer = NaN;
@@ -35,55 +38,66 @@ timer = NaN;
 let dadosRanking = [];
 let tabuleiro = [];
 
+M.toast({
+    html: 'Bem-Vindo ao Tetrauros!',
+    classes: 'pink'
+});
 
-
-let p; //objeto peca
+M.toast({
+    html: 'Dimensão Atual: 10 x 20',
+    classes: 'yellow'
+});
 
 function iniciar() {
     iniciarContador();
     controle++;
 
-    CriaTabuleiro();
-    p = pecaAleatoria();
-    nextP = pecaAleatoria();
+    if(controle2 > 0)
+    {
+        controle2--;
+        CriaTabuleiro();
+        p = pecaAleatoria();
+        nextP = pecaAleatoria();
 
-    Tabuleiro.desenhar(LINHA, COLUNA, ctx);
-    Tabuleiro.desenhar(LINHANEXTPIECE, COLUNANEXTPIECE, ctxNextPiece);
-    clearInterval(timer);
-    timer = setInterval(drop, dificuldadeDoJogo)
+        Tabuleiro.desenhar(LINHA, COLUNA, ctx);
+        Tabuleiro.desenhar(LINHANEXTPIECE, COLUNANEXTPIECE, ctxNextPiece);
+        clearInterval(timer);
+        timer = setInterval(drop, dificuldadeDoJogo)
 
-    gameOver = false;
-    pontos = 0;
-    linhasDeletadas = 0;
-    nivel = 1;
-    PLACAR.innerHTML = pontos;
-    LINHASAPAGADAS.innerHTML = linhasDeletadas;
-    NIVEL.innerHTML = nivel;
+        gameOver = false;
+        pontos = 0;
+        linhasDeletadas = 0;
+        nivel = 1;
+        PLACAR.innerHTML = pontos;
+        LINHASAPAGADAS.innerHTML = linhasDeletadas;
+        NIVEL.innerHTML = nivel;
 
-    M.toast({
-        html: 'Jogo iniciado',
-        classes: 'green darken-1 rounded'
-    });
-    nextP.desenhar(ctxNextPiece);
-
-
+        M.toast({
+            html: 'Jogo iniciado',
+            classes: 'green darken-1 rounded'
+        });
+        nextP.desenhar(ctxNextPiece);
+    }
 }
 
 
 function pausar() {
-    btPausarReference = document.getElementById("btPausar");
-    if (!pausado) {
-        pausarContador();
-        btPausarReference.innerHTML = "Continuar";
-        M.toast({
-            html: 'Jogo pausado para DEBUG',
-            classes: 'purple darken-1 rounded'
-        });
-        pausado = true;
-    } else {
-        iniciarContador();
-        btPausarReference.innerHTML = "Pausar"
-        pausado = false;
+    if(controle >= 1)
+    {
+        btPausarReference = document.getElementById("btPausar");
+        if (!pausado) {
+            pausarContador();
+            btPausarReference.innerHTML = "Continuar";
+            M.toast({
+                html: 'Jogo pausado para DEBUG',
+                classes: 'purple darken-1 rounded'
+            });
+            pausado = true;
+        } else {
+            iniciarContador();
+            btPausarReference.innerHTML = "Pausar"
+            pausado = false;
+        }
     }
 }
 
@@ -101,6 +115,7 @@ function reiniciar() {
                 location.reload();
             }
         } else {
+            controle2++;
             iniciar();
         }
     }
@@ -482,7 +497,7 @@ const PIECES = [
 // ++++++++++++++++++++++
 function pecaAleatoria() {
     let aleatorio = (Math.floor(Math.random() * PIECES.length));
-    console.log("Numero gerado: " + aleatorio);
+    //console.log("Numero gerado: " + aleatorio);
     // Gero um numeric aleatório que vai de 0 (inclusivo) até 1 (exclusivo)
     // Multiplico pelo tamanho do vetor de peças
     // Arredondo para um "inteiro", pois o math.random gera um numeric qualquer (com casas decimais)
@@ -542,23 +557,48 @@ var Tabuleiro = {
 };
 
 function redimensionarJogo() {
-    if (canvas.offsetWidth == "204" && canvas.offsetHeight == "404") {
-        alert("Tem certeza que deseja redimensionar o jogo para que fique MENOR?");
-        //iniciarJogo();
-        canvas.height = "200";
-        canvas.width = "100";
+    if (AREA_BLOCO === 20 && canvas.width === 200 && canvas.height === 400) {
+        alert("Tem certeza que deseja redimensionar?");
+        alert("O jogo será reiniciado e o progresso atual será perdido!");
+        M.toast({
+            html: 'Dimensão: 22 x 44',
+            classes: 'yellow rounded'
+        });
+        AREA_BLOCO = 10;
+        canvas.width = 220;
+        canvas.height= 420;
+        canvasNextPiece.width = 70;
+        canvasNextPiece.height = 20;
+
         LINHA = Math.floor(canvas.height / AREA_BLOCO);
         COLUNA = Math.floor(canvas.width / AREA_BLOCO);
-        CriaTabuleiro();
-        Tabuleiro.desenhar(LINHA, COLUNA, ctx);
+
+        LINHANEXTPIECE = Math.floor(canvasNextPiece.height / AREA_BLOCO);
+        COLUNANEXTPIECE = Math.floor(canvasNextPiece.width / AREA_BLOCO);
+
+        controle2++;
+        iniciar();
     } else {
-        alert("Tem certeza que deseja redimensionar o jogo para que fique MAIOR?");
-        canvas.height = "400";
-        canvas.width = "200";
+        alert("Tem certeza que deseja redimensionar?");
+        alert("O jogo será reiniciado e o progresso atual será perdido!");
+        M.toast({
+            html: 'Dimensão: 10 x 20',
+            classes: 'yellow rounded'
+        });
+        AREA_BLOCO = 20;
+        canvas.width = 200;
+        canvas.height= 400;
+        canvasNextPiece.width = 140;
+        canvasNextPiece.height = 40;
+
         LINHA = Math.floor(canvas.height / AREA_BLOCO);
         COLUNA = Math.floor(canvas.width / AREA_BLOCO);
-        CriaTabuleiro();
-        Tabuleiro.desenhar(LINHA, COLUNA, ctx);
+
+        LINHANEXTPIECE = Math.floor(canvasNextPiece.height / AREA_BLOCO);
+        COLUNANEXTPIECE = Math.floor(canvasNextPiece.width / AREA_BLOCO);
+
+        controle2++;
+        iniciar();
     }
 
 };

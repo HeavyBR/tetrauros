@@ -9,13 +9,13 @@ body
     font-family: 'Press Start 2P', cursive;
     font-family: 'Saira Stencil One', cursive;
 
-    margin-top: 2.5%;
-    margin-bottom: 2.5%;
+    margin-top: 1%;
+    margin-bottom: 1%;
     margin-left: 0%;
     margin-right: 0%;
     background-color: grey;
 
-    overflow: hidden;
+    overflow: auto;
 }
 table
 {
@@ -24,6 +24,8 @@ table
 }
 td
 {
+    padding-top: 0%;
+    padding-bottom: 0.5%;
     text-align: center;
 }
 button:hover
@@ -64,19 +66,19 @@ button:disabled
 }
 .corpo
 {
-    position: relative;
+    position: absolute;
     background-color:black;
     opacity:0.9; /* Levemente transparente */
 
     width:75%;
     margin-left:10%;
     margin-right:10%;
-    padding-left:2.5%;
-    padding-right:2.5%;
+    padding-left:2%;
+    padding-right:2%;
 
-    height:70%;
-    padding-top:2.5%;
-    padding-bottom:2.5%;
+    height:96%;
+    padding-top:2%;
+    padding-bottom:2%;
 
     border-radius:15px;
 }
@@ -106,10 +108,17 @@ button:disabled
 {
     width: 40%;
 }
-#tela
+#tela, #CanvasNextPiece
 {
-    background-color: #000000;
     border: solid #FFFFFF 2px;
+}
+#proxPeca
+{
+    font-size: 0.875em;
+    color: whitesmoke;
+    text-align: center;
+    margin-top: auto;
+    margin-bottom: auto;
 }
 #titulo
 {
