@@ -258,7 +258,7 @@ class Peca {
                     }
                 } else {
                     if (this.pecaAtiva[l][c]) {
-                        desenharBloco(c, l, cor, ctx);
+                        desenharBloco(c + 2, l, cor, ctx);
                     }
                 }
             }
