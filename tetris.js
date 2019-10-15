@@ -1,6 +1,7 @@
 let PLACAR = document.getElementById('score');
 let LINHASAPAGADAS = document.getElementById('deletedLines');
-let TIME = document.getElementById('time');
+let SEGUNDO = document.getElementById('segundo');
+let MINUTO = document.getElementById('minuto');
 let NIVEL = document.getElementById('stage');
 let RANK = document.getElementById('rankingJogador');
 
@@ -27,9 +28,10 @@ var linhasDeletadas = 0;
 var nivel = 1;
 var controle = 0;
 var controle2 = 1;
-var temporizador = 0;
+var segundos = 0;
 var statusContador = 0;
 var tempo;
+var minutos = 0;
 var p = undefined; //objeto peca
 var nextP = undefined;
 const VAZIO = "BLACK"; // Cor de fundo do canvas
@@ -133,7 +135,8 @@ function attRanking() {
             'NOME': nome,
             'PONTOS': pontos,
             'NIVEL': nivel,
-            'TEMPO': temporizador,
+            'MINUTO': minutos,
+            'SEGUNDO': segundos,
             'LINHAS': linhasDeletadas
         }
         dadosRanking.push(dadosJogador);
@@ -156,7 +159,7 @@ function attRanking() {
             RANK += dadosRanking[i].NOME + "  |  ";
             RANK += dadosRanking[i].PONTOS + "  |  ";
             RANK += dadosRanking[i].NIVEL + "  |  ";
-            RANK += dadosRanking[i].TEMPO + "  |  ";
+            RANK += dadosRanking[i].MINUTO + "min" + dadosRanking[i].SEGUNDO + "s" + "  |  ";
             RANK += dadosRanking[i].LINHAS;
             RANK += "<br/>";
         }
@@ -179,9 +182,14 @@ function fimJogo() {
 
 
 function contadorTempo() {
-    TIME.innerHTML = temporizador;
+    SEGUNDO.innerHTML = segundos;
+    MINUTO.innerHTML = minutos;
     tempo = setTimeout(contadorTempo, 1000);
-    temporizador++;
+    segundos++;
+    if(segundos == 60){
+        minutos++;
+        segundos = 0;
+    }
 }
 
 function iniciarContador() {
@@ -198,7 +206,8 @@ function pausarContador() {
 
 function resetarContador() {
     clearTimeout(tempo);
-    temporizador = 0;
+    minutos = 0;
+    segundos = 0;
     statusContador = 0;
 }
 

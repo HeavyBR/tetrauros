@@ -134,7 +134,7 @@ button:disabled
     text-align: center;
     margin: 0%;
 }
-#score, #time, #stage, #deletedLines, #rankingJogador
+#score, #segundo, #minuto, #stage, #deletedLines, #rankingJogador
 {
     display: inline-block;
 }
