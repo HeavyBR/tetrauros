@@ -112,7 +112,7 @@ function reiniciar() {
         if (opcao !== true) {
             var opcao2 = confirm("Recarregar pagina?");
             if (opcao2 !== true) {
-
+                reiniciar();
             } else {
                 location.reload();
             }
