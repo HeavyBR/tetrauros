@@ -10,7 +10,7 @@ const canvasNextPiece = document.getElementById('CanvasNextPiece');
 const ctxNextPiece = canvasNextPiece.getContext('2d');
 const ctx = canvas.getContext('2d');
 AREA_BLOCO = 20;
-const VELOCIDADE = 1600;
+const VELOCIDADE = 1500;
 
 LINHA = Math.floor(canvas.height / AREA_BLOCO);
 COLUNA = Math.floor(canvas.width / AREA_BLOCO);
@@ -24,6 +24,7 @@ var audioLinhaCompleta = new Audio('linha.mp3');
 var audioGameOver = new Audio('gameOver.wav')
 var gameOver = false;
 var pontos = 0;
+var pontosPARCIAL = 0;
 var linhasDeletadas = 0;
 var nivel = 1;
 var controle = 0;
@@ -47,7 +48,7 @@ M.toast({
 
 M.toast({
     html: 'Dimensão Atual: 10 x 20',
-    classes: 'yellow'
+    classes: 'teal darken-1'
 });
 
 function iniciar() {
@@ -94,6 +95,11 @@ function pausar() {
                 html: 'Jogo pausado para DEBUG',
                 classes: 'purple darken-1 rounded'
             });
+            M.toast({
+                html: 'Controles para DEBUG: W, A, S, D e Space',
+                classes: 'orange darken-4 rounded'
+            });
+            nextP.desenhar(ctxNextPiece);
             pausado = true;
         } else {
             iniciarContador();
@@ -112,7 +118,7 @@ function reiniciar() {
         if (opcao !== true) {
             var opcao2 = confirm("Recarregar pagina?");
             if (opcao2 !== true) {
-                reiniciar();
+
             } else {
                 location.reload();
             }
@@ -342,15 +348,6 @@ class Peca {
                 }
 
                 linhasDeletadas += 1;
-                dificuldadeDoJogo -= 40;
-                if (linhasDeletadas == 5 || linhasDeletadas == 10 || linhasDeletadas == 15 || linhasDeletadas == 20 || linhasDeletadas == 25 || linhasDeletadas == 30 || linhasDeletadas == 35 || linhasDeletadas == 40) {
-                    nivel += 1;
-                    M.toast({
-                        html: 'DIFICULDADE AUMENTADA!!',
-                        classes: 'red darken-1 rounded'
-                    })
-                }
-
                 clearInterval(timer);
                 timer = setInterval(drop, dificuldadeDoJogo);
                 audioLinhaCompleta.play();
@@ -361,21 +358,35 @@ class Peca {
             case 1:
                 bonus = 10;
                 pontos += bonus;
+                pontosPARCIAL += bonus;
                 break;
             case 2:
                 bonus = 40;
                 pontos += bonus;
+                pontosPARCIAL += bonus;
                 break;
             case 3:
                 bonus = 90;
                 pontos += bonus;
+                pontosPARCIAL += bonus;
                 break;
             case 4:
-                bonus = 160;
+                bonus = 2000;
                 pontos += bonus;
+                pontosPARCIAL += bonus;
                 break;
         }
 
+        if(pontosPARCIAL >= 500) {
+            pontosPARCIAL = 0;
+            dificuldadeDoJogo -= 75;
+            nivel += 1;
+            M.toast({
+                html: 'DIFICULDADE AUMENTADA!!!',
+                classes: 'red darken-1 rounded'
+            })
+        }
+        console.log(dificuldadeDoJogo);
         // Atualizar tabuleiro
         Tabuleiro.desenhar(LINHA, COLUNA, ctx);
         // Atualizar Informacoes
@@ -493,12 +504,12 @@ function desenharBloco(x, y, color, ctx) {
 
 // Declaracao dos tetromino e cores
 const PIECES = [
-    [L, "orange"],
+    /*[L, "orange"],
     [J, "blue"],
     [T, "purple"],
-    [O, "yellow"],
+    [O, "yellow"],*/
     [I, "cyan"],
-    [U, "green"],
+    /*[U, "green"],*/
 ];
 
 // ++++++++++++++++++++++
@@ -571,7 +582,7 @@ function redimensionarJogo() {
         alert("O jogo será reiniciado e o progresso atual será perdido!");
         M.toast({
             html: 'Dimensão: 22 x 44',
-            classes: 'yellow rounded'
+            classes: 'teal darken-1 rounded'
         });
         AREA_BLOCO = 10;
         canvas.width = 220;
@@ -592,7 +603,7 @@ function redimensionarJogo() {
         alert("O jogo será reiniciado e o progresso atual será perdido!");
         M.toast({
             html: 'Dimensão: 10 x 20',
-            classes: 'yellow rounded'
+            classes: 'teal darken-1 rounded'
         });
         AREA_BLOCO = 20;
         canvas.width = 200;
