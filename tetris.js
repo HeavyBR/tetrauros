@@ -9,8 +9,9 @@ const canvas = document.getElementById('tela');
 const canvasNextPiece = document.getElementById('CanvasNextPiece');
 const ctxNextPiece = canvasNextPiece.getContext('2d');
 const ctx = canvas.getContext('2d');
-AREA_BLOCO = 20;
 const VELOCIDADE = 1500;
+
+AREA_BLOCO = 20;
 
 LINHA = Math.floor(canvas.height / AREA_BLOCO);
 COLUNA = Math.floor(canvas.width / AREA_BLOCO);
@@ -55,8 +56,7 @@ function iniciar() {
     iniciarContador();
     controle++;
 
-    if(controle2 > 0)
-    {
+    if (controle2 > 0) {
         controle2--;
         CriaTabuleiro();
         p = pecaAleatoria();
@@ -85,8 +85,7 @@ function iniciar() {
 
 
 function pausar() {
-    if(controle >= 1)
-    {
+    if (controle >= 1) {
         btPausarReference = document.getElementById("btPausar");
         if (!pausado) {
             pausarContador();
@@ -192,7 +191,7 @@ function contadorTempo() {
     MINUTO.innerHTML = minutos;
     tempo = setTimeout(contadorTempo, 1000);
     segundos++;
-    if(segundos == 60){
+    if (segundos == 60) {
         minutos++;
         segundos = 0;
     }
@@ -371,13 +370,13 @@ class Peca {
                 pontosPARCIAL += bonus;
                 break;
             case 4:
-                bonus = 2000;
+                bonus = 160;
                 pontos += bonus;
                 pontosPARCIAL += bonus;
                 break;
         }
 
-        if(pontosPARCIAL >= 500) {
+        if (pontosPARCIAL >= 500) {
             pontosPARCIAL = 0;
             dificuldadeDoJogo -= 75;
             nivel += 1;
@@ -386,7 +385,7 @@ class Peca {
                 classes: 'red darken-1 rounded'
             })
         }
-        console.log(dificuldadeDoJogo);
+        //console.log(dificuldadeDoJogo);
         // Atualizar tabuleiro
         Tabuleiro.desenhar(LINHA, COLUNA, ctx);
         // Atualizar Informacoes
@@ -504,12 +503,12 @@ function desenharBloco(x, y, color, ctx) {
 
 // Declaracao dos tetromino e cores
 const PIECES = [
-    /*[L, "orange"],
+    [L, "orange"],
     [J, "blue"],
     [T, "purple"],
-    [O, "yellow"],*/
+    [O, "yellow"],
     [I, "cyan"],
-    /*[U, "green"],*/
+    [U, "green"],
 ];
 
 // ++++++++++++++++++++++
@@ -559,7 +558,7 @@ function CONTROL(event) {
 
 // Funcao que desenha o painel de jogo
 var Tabuleiro = {
-    desenhar: function (LINHA, COLUNA, ctx) {
+    desenhar: function(LINHA, COLUNA, ctx) {
         for (let l = 0; l < LINHA; l++) {
             for (let c = 0; c < COLUNA; c++) {
                 desenharBloco(c, l, tabuleiro[l][c], ctx);
@@ -586,7 +585,7 @@ function redimensionarJogo() {
         });
         AREA_BLOCO = 10;
         canvas.width = 220;
-        canvas.height= 420;
+        canvas.height = 420;
         canvasNextPiece.width = 70;
         canvasNextPiece.height = 20;
 
@@ -607,7 +606,7 @@ function redimensionarJogo() {
         });
         AREA_BLOCO = 20;
         canvas.width = 200;
-        canvas.height= 400;
+        canvas.height = 400;
         canvasNextPiece.width = 140;
         canvasNextPiece.height = 40;
 
@@ -622,4 +621,3 @@ function redimensionarJogo() {
     }
 
 };
-
