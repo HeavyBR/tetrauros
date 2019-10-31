@@ -45,7 +45,7 @@ button:disabled
     background-color: #191970;
     border: none;
     color: white;
-    padding: 12px;
+    padding: 5px;
     width: 100px;
     height: 40px;
     cursor: pointer;
@@ -59,8 +59,8 @@ button:disabled
     border-radius: 5px;
     border: none;
     color: white;
-    padding: 12px;
-    width: 309px;
+    padding: 5px;
+    width: 154px;
     height: 40px;
     cursor: pointer;
 }

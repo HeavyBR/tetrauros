@@ -7,10 +7,7 @@
 
 <body>
 	<?php 
-		$BD = "tetrauros";
-		$sname = "localhost";
-		$uname = "root";
-		$pwd = "";
+		include "valoresServidor.php";
 
 		$form = "<form action = 'cadastro.php' method = 'POST'>
 					<p>Nome Completo: <input type = 'text' name = 'nome_completo'></p>
@@ -45,8 +42,11 @@
 						{
 							$mbrow = "$nome" . "," . "$data_nasc" . "," . "$cpf" . "," . "$telefone" . "," . "$email" . "," . "$username" . "," .  "$password";
 
-						$sql = "INSERT INTO usuario VALUES(" . $mbrow . ")";
-						$conn->query($sql);
+							$sql = "INSERT INTO usuario VALUES(" . $mbrow . ")";
+							$conn->query($sql);
+
+							header("location: login.php");
+							die('Não ignore meu cabeçalho...');
 						}
 						else
 						{
@@ -64,6 +64,6 @@
 				{		
 					echo $form;
 				}
-			?>	
+	?>	
 </body>		
 </html>

@@ -2,10 +2,7 @@
 <html>
    <body>
 		<?php
-			$BD = "tetrauros";
-			$sname = "localhost";
-			$uname = "root";
-			$pwd = "";
+			include "valoresServidor.php";
 
 			echo "<h1> Criando BD </h1>";
 	        echo "<p>Criando banco de dados... </p>";
@@ -44,15 +41,16 @@
 
 					$partida = "CREATE TABLE partida 
 								(
+									cod_partida int NOT NULL AUTO_INCREMENT,
 		     						username varchar(20) NOT NULL,
-		     						pontos int not null,
-		     						nivel int not null,
-		     						duracao int not null,
-		     						linhas int not null,
-		     						data datetime not null,
+		     						pontos int NOT NULL,
+		     						nivel int NOT NULL,
+		     						duracao int NOT NULL,
+		     						linhas int NOT NULL,
+		     						data datetime NOT NULL, /* Usar funcao = CURRENT_TIME*/
 
 									FOREIGN KEY(username) REFERENCES usuario(username),
-				    				PRIMARY KEY(username)
+				    				PRIMARY KEY(cod_partida)
 			    				)";
 
 					$conn->exec($partida);

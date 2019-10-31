@@ -1,16 +1,16 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang = "pt">
 <head>
 	<meta charset = "UTF-8">
-	<title>Tetrauros - Tela de Alterações</title>
+	<title>Tetrauros - Tela de Alteração</title>
 </head>
 
 <body>
 	<?php 
-		$BD = "tetrauros";
-		$sname = "localhost";
-		$uname = "root";
-		$pwd = "";
+		$user = $_SESSION['user'];
+
+		include "valoresServidor.php";
 
 		$formNome = "<form action = 'alteracoes.php' method = 'POST'>
 						<p>Nome completo: <input type = 'text' name = 'nome_completo'</p>
@@ -42,18 +42,14 @@
 
 						$nome = $_POST["nome_completo"];
 						$novo_nome = $conn->quote($_POST["novo_nome"]);
- 
-						$SQLbusca = "SELECT username FROM usuario WHERE nome_completo = '$nome'";
 
-						$resultado = $conn->query($SQLbusca);
-						$linha = $resultado->fetch(PDO::FETCH_ASSOC);
-
-						$comparacao = $linha['username'];
-
-						$SQL = "UPDATE usuario SET nome_completo = $novo_nome WHERE username = '$comparacao'";
+						$SQL = "UPDATE usuario SET nome_completo = $novo_nome WHERE username = '$user'";
 						$conn->exec($SQL);
 
 						echo "<p> Alteracao de nome realizada com sucesso! </p>";
+
+						header("location: ../index.php");
+						die('Não ignore meu cabeçalho...');
 					}
 					catch(PDOException $e)
 					{
@@ -70,18 +66,13 @@
 
 						$telefone = $_POST["telefone"];
 						$novo_telefone = $conn->quote($_POST["novo_telefone"]);
- 
-						$SQLbusca = "SELECT username FROM usuario WHERE telefone = '$telefone'";
 
-						$resultado = $conn->query($SQLbusca);
-						$linha = $resultado->fetch(PDO::FETCH_ASSOC);
-
-						$comparacao = $linha['username'];
-
-						$SQL = "UPDATE usuario SET telefone = $novo_telefone WHERE username = '$comparacao'";
+						$SQL = "UPDATE usuario SET telefone = $novo_telefone WHERE username = '$user'";
 						$conn->exec($SQL);
 
 						echo "<p> Alteracao de telefone realizada com sucesso! </p>";
+						header("location: ../index.php");
+						die('Não ignore meu cabeçalho...');
 					}
 					catch(PDOException $e)
 					{
@@ -99,17 +90,12 @@
 						$email = $_POST["email"];
 						$novo_email = $conn->quote($_POST["novo_email"]);
  
-						$SQLbusca = "SELECT username FROM usuario WHERE email = '$email'";
-
-						$resultado = $conn->query($SQLbusca);
-						$linha = $resultado->fetch(PDO::FETCH_ASSOC);
-
-						$comparacao = $linha['username'];
-
-						$SQL = "UPDATE usuario SET email = $novo_email WHERE username = '$comparacao'";
+						$SQL = "UPDATE usuario SET email = $novo_email WHERE username = '$user'";
 						$conn->exec($SQL);
 
 						echo "<p> Alteracao de email realizada com sucesso! </p>";
+						header("location: ../index.php");
+						die('Não ignore meu cabeçalho...');
 					}
 					catch(PDOException $e)
 					{
@@ -126,18 +112,13 @@
 
 						$senha = $_POST["senha"];
 						$nova_senha = $conn->quote($_POST["nova_senha"]);
- 
-						$SQLbusca = "SELECT username FROM usuario WHERE password = '$senha'";
 
-						$resultado = $conn->query($SQLbusca);
-						$linha = $resultado->fetch(PDO::FETCH_ASSOC);
-
-						$comparacao = $linha['username'];
-
-						$SQL = "UPDATE usuario SET password = $nova_senha WHERE username = '$comparacao'";
+						$SQL = "UPDATE usuario SET password = $nova_senha WHERE username = '$user'";
 						$conn->exec($SQL);
 
 						echo "<p> Alteracao de senha realizada com sucesso! </p>";
+						header("location: ../index.php");
+						die('Não ignore meu cabeçalho...');
 					}
 					catch(PDOException $e)
 					{
