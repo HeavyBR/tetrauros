@@ -1,7 +1,18 @@
-<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang = "pt">
 <head>
+	
+	<?php 
+        session_start();
+        if((!isset($_SESSION['user']) == true) and (!isset($_SESSION['password']) == true))
+        {
+            unset($_SESSION['user']);
+            unset($_SESSION['password']);
+            header('location:login.php');
+        } 
+        $logado = $_SESSION['user'];
+    ?>
+
 	<meta charset = "UTF-8">
 	<title>Tetrauros - Tela de Alteração</title>
 </head>

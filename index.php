@@ -1,7 +1,18 @@
-<?php session_start() ?>
 <!DOCTYPE html>
 <html lang="pt">
 <head>
+
+   <?php 
+        session_start();
+        if((!isset($_SESSION['user']) == true) and (!isset($_SESSION['password']) == true))
+        {
+            unset($_SESSION['user']);
+            unset($_SESSION['password']);
+            header('location: PHP/login.php');
+        } 
+        $logado = $_SESSION['user'];
+    ?>
+
     <meta charset="UTF-8"/>
     <title>JS - Tetrauros</title>
     <!-- Compiled and minified CSS -->
@@ -46,7 +57,7 @@
             <td class="lateral">
                 <div class="ranking">
                     <h4>Ranking</h4>
-                        <div id="rankingJogador"> Jogador | Pontos | Nivel | Tempo | Linhas<br/><br/>
+                        <div id="rankingJogador" value = ""> Jogador | Pontos | Nivel | Tempo | Linhas<br/><br/>
                                                  ------------<br/>
                                                  ------------<br/>
                                                  ------------</div><br/>
@@ -67,9 +78,7 @@
                 
                 <button class="grande" type="button" onclick="redimensionarJogo()" id="btRedimensionar">Redimensionar Jogo</button>
                 <button class="grande" type="button"  onclick="" id="btDesconectar"><a href='PHP/desconexao.php'>Desconectar</a></button>
-                
-                
-                
+   
             </td>
         </tr>
     </table>
