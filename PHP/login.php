@@ -8,7 +8,7 @@
 </head>
 <body>
 	<form method = "POST" action = "autenticar.php">
-		<p> Nome: <input type = "text" name = "nome"> </p>
+		<p> Usuário: <input type = "text" name = "nome"> </p>
 		<p> Senha: <input type = "password" name = "senha"> </p> 
 		<input type = "submit">
 	</form>
