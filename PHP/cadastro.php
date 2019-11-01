@@ -2,11 +2,13 @@
 <html lang = "pt">
 <head>
 	<meta charset = "UTF-8">
-	<title> Tela de Cadastro </title>
+	<title>Tetrauros - Tela de Cadastro</title>
 </head>
 
 <body>
 	<?php 
+		include "valoresServidor.php";
+
 		$form = "<form action = 'cadastro.php' method = 'POST'>
 					<p>Nome Completo: <input type = 'text' name = 'nome_completo'></p>
 					<p>Data de Nascimento: <input type = 'date' name = 'data_nascimento'</p>
@@ -15,14 +17,14 @@
 					<p>Email: <input type = 'email' name = 'email'</p>
 					<p>Username: <input type = 'text' name = 'username'</p>
 					<p>Senha: <input type = 'password' name = 'password'</p>
-					<input type = 'submit' value = 'Cadastrin'/>
+					<input type = 'submit' value = 'Cadastrar'/>
 				</form>";
 				
 				if (isset($_POST["username"]))
 				{
 					try
 					{
-						$conn = new PDO("mysql:host=localhost;dbname=tetrauros", "root", "ftlimeira");
+						$conn = new PDO("mysql:host=$sname;dbname=$BD", $uname, $pwd);
 						$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 						
 						$username = $conn->quote($_POST["username"]);
@@ -40,8 +42,11 @@
 						{
 							$mbrow = "$nome" . "," . "$data_nasc" . "," . "$cpf" . "," . "$telefone" . "," . "$email" . "," . "$username" . "," .  "$password";
 
-						$sql = "INSERT INTO usuario VALUES(" . $mbrow . ")";
-						$conn->query($sql);
+							$sql = "INSERT INTO usuario VALUES(" . $mbrow . ")";
+							$conn->query($sql);
+
+							header("location: login.php");
+							die('Não ignore meu cabeçalho...');
 						}
 						else
 						{
@@ -59,6 +64,6 @@
 				{		
 					echo $form;
 				}
-			?>	
+	?>	
 </body>		
 </html>

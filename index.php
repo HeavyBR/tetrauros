@@ -1,6 +1,18 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
+
+   <?php 
+        session_start();
+        if((!isset($_SESSION['user']) == true) and (!isset($_SESSION['password']) == true))
+        {
+            unset($_SESSION['user']);
+            unset($_SESSION['password']);
+            header('location: PHP/login.php');
+        } 
+        $logado = $_SESSION['user'];
+    ?>
+
     <meta charset="UTF-8"/>
     <title>JS - Tetrauros</title>
     <!-- Compiled and minified CSS -->
@@ -45,7 +57,7 @@
             <td class="lateral">
                 <div class="ranking">
                     <h4>Ranking</h4>
-                        <div id="rankingJogador"> Jogador | Pontos | Nivel | Tempo | Linhas<br/><br/>
+                        <div id="rankingJogador" value = ""> Jogador | Pontos | Nivel | Tempo | Linhas<br/><br/>
                                                  ------------<br/>
                                                  ------------<br/>
                                                  ------------</div><br/>
@@ -54,21 +66,19 @@
         </tr>
         <tr>
             <td colspan="3" id="opcoes">
-                <button class="grande" type="button" onclick="" id="btAlterar">Alterar Dados</button>
+                <button class="grande" type="button" onclick="" id="btAlterar"><a href='PHP/alteracoes.php'>Alterar Dados</a></button>
 
                 <button class="normal" type="button" onclick="iniciar()" id="btIniciar">Iniciar</button>
                 <button class="normal" type="button" onclick="reiniciar()" id="btNovo">Reiniciar</button>
                 <button class="normal" type="button"  onclick="pausar()" id="btPausar">Pausar</button>
 
-                <button class="grande" type="button"  onclick="" id="btRanking"><a href='rankingglobal.php'>Ranking Global</a></button>
+                <button class="grande" type="button"  onclick="" id="btRanking"><a href='PHP/rankingglobal.php'>Ranking Global</a></button>
                 
                 <br/>
                 
                 <button class="grande" type="button" onclick="redimensionarJogo()" id="btRedimensionar">Redimensionar Jogo</button>
-                <button class="grande" type="button"  onclick="" id="btDesconectar">Desconectar</button>
-                
-                
-                
+                <button class="grande" type="button"  onclick="" id="btDesconectar"><a href='PHP/desconexao.php'>Desconectar</a></button>
+   
             </td>
         </tr>
     </table>

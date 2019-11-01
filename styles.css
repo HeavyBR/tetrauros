@@ -1,3 +1,8 @@
+html
+{
+    height: 100%;
+    width: 100%;
+}
 body
 {
     background-image: url("img/star.jpg");
@@ -9,8 +14,8 @@ body
     font-family: 'Press Start 2P', cursive;
     font-family: 'Saira Stencil One', cursive;
 
-    margin-top: 1%;
-    margin-bottom: 1%;
+    margin-top: 0%;
+    margin-bottom: 0%;
     margin-left: 0%;
     margin-right: 0%;
     background-color: grey;
@@ -26,6 +31,10 @@ td
 {
     padding-top: 0%;
     padding-bottom: 0.5%;
+    text-align: center;
+}
+form
+{
     text-align: center;
 }
 button:hover
@@ -45,7 +54,7 @@ button:disabled
     background-color: #191970;
     border: none;
     color: white;
-    padding: 12px;
+    padding: 5px;
     width: 100px;
     height: 40px;
     cursor: pointer;
@@ -59,8 +68,8 @@ button:disabled
     border-radius: 5px;
     border: none;
     color: white;
-    padding: 12px;
-    width: 309px;
+    padding: 5px;
+    width: 154px;
     height: 40px;
     cursor: pointer;
 }
@@ -81,7 +90,31 @@ button:disabled
     padding-bottom:2%;
 
     border-radius:15px;
+    color: whitesmoke;
 }
+
+.corpo_menor
+{
+    position: absolute;
+    background-color: black;
+    opacity:0.9; /* Levemente transparente */
+
+    width:40%;
+    margin-left:25%;
+    margin-right:25%;
+    padding-left:5%;
+    padding-right:5%;
+
+    height:40%;
+    margin-top:10%;
+    margin-bottom:8%;
+    padding-top:5%;
+    padding-bottom:5%;
+
+    border-radius:15px;
+    color: whitesmoke;
+}
+
 .informacoes
 {
     display: inline-block;
