@@ -66,18 +66,18 @@
         </tr>
         <tr>
             <td colspan="3" id="opcoes">
-                <button class="grande" type="button" onclick="" id="btAlterar"><a href='PHP/alteracoes.php'>Alterar Dados</a></button>
+                <button class="grande" type="button" onclick="" id="btAlterar"><a href='alteracoes.php'>Alterar Dados</a></button>
 
                 <button class="normal" type="button" onclick="iniciar()" id="btIniciar">Iniciar</button>
                 <button class="normal" type="button" onclick="reiniciar()" id="btNovo">Reiniciar</button>
                 <button class="normal" type="button"  onclick="pausar()" id="btPausar">Pausar</button>
 
-                <button class="grande" type="button"  onclick="" id="btRanking"><a href='PHP/rankingglobal.php'>Ranking Global</a></button>
+                <button class="grande" type="button"  id="btRanking"><a href='rankingglobal.php'>Ranking Global</a></button>
                 
                 <br/>
                 
                 <button class="grande" type="button" onclick="redimensionarJogo()" id="btRedimensionar">Redimensionar Jogo</button>
-                <button class="grande" type="button"  onclick="" id="btDesconectar"><a href='PHP/desconexao.php'>Desconectar</a></button>
+                <button class="grande" type="button"  id="btDesconectar"><a href='desconexao.php'>Desconectar</a></button>
    
             </td>
         </tr>

@@ -154,10 +154,10 @@ function attRanking() {
 
         dadosRanking.sort(function(a, b) {
             if (a.PONTOS < b.PONTOS) {
-                return 1
+                return 1;
             };
             if (a.PONTOS > b.PONTOS) {
-                return -1
+                return -1;
             };
             return 0;
         });
@@ -174,7 +174,7 @@ function attRanking() {
             RANK += dadosRanking[i].LINHAS;
             RANK += "<br/>";
         }
-
+        createCookie("dados",dadosJogador);
         document.getElementById("rankingJogador").innerHTML = RANK;
         M.toast({
             html: 'Você está no RANKING!',
@@ -755,3 +755,18 @@ function redimensionarJogo() {
     }
 
 };
+
+function createCookie(name, value, days) {
+    var expires;
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toGMTString();
+    }
+    else {
+        expires = "";
+    }
+    document.cookie = escape(name) + "=" + JSON.stringify(value) + expires + "; path=/";
+}
+
+
