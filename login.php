@@ -5,7 +5,7 @@
     <title>Tetrauros - Tela Login</title>
     <!-- Compiled and minified CSS -->
     <!-- link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" -->
-    <link rel="stylesheet" href="../styles.css" type="text/css">
+    <link rel="stylesheet" href="styles.css" type="text/css">
     <style>
         @import url('https://fonts.googleapis.com/css?family=Black+Ops+One|Press+Start+2P|Saira+Stencil+One&display=swap');
     </style>

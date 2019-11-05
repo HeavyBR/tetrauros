@@ -39,9 +39,24 @@
 			$SQL = $conn->query("INSERT INTO partida (username,pontos,nivel,duracao,linhas,data) VALUES ($nome,$pontos,$nivel,$duracao,$linhas,$data)");
 
 
+			$conn->exec('SET @row_number := 0;');
+			$busca = 	'
+							SELECT 
+							    (@row_number := @row_number + 1) AS num, username
+							FROM partida 
+							ORDER BY pontos DESC
+						';
+			$SQL = $conn->query($busca);	
+			echo "<h1>Melhor classificação de ". $logado . ": ";
+			while($row = $SQL->fetch(PDO::FETCH_ASSOC)) {
+				if($row['username'] == $logado) {
+					echo $row['num'] . " posição </h1>";
+					break;
+				}
+			}
+
 
 			$SQL = $conn->query("SELECT * FROM partida ORDER BY pontos DESC LIMIT 10");
-			echo "<h1>Melhor posição no ranking: </h1>";
 			echo "<h1>Ranking Global</h1>";
 			echo "Usuario | Pontos | Nível | Duração | Linha removidas | Data";
 			while($row = $SQL->fetch(PDO::FETCH_ASSOC)) {
@@ -53,7 +68,7 @@
 							 $row["data"] . "</p>";
 			}
 
-			$SQL = $conn->query("SELECT * FROM partida WHERE username = '$user' ORDER BY pontos DESC");
+			$SQL = $conn->query("SELECT * FROM partida WHERE username = '$logado' ORDER BY pontos DESC LIMIT 10");
 			echo "<h1>Ranking Jogador</h1>";
 			echo "Usuario | Pontos | Nível | Duração | Linha removidas | Data";
 			while($row = $SQL->fetch(PDO::FETCH_ASSOC)) {

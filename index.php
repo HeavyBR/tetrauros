@@ -8,7 +8,7 @@
         {
             unset($_SESSION['user']);
             unset($_SESSION['password']);
-            header('location: PHP/login.php');
+            header('location: login.php');
         } 
         $logado = $_SESSION['user'];
     ?>

@@ -1,22 +1,6 @@
 <!DOCTYPE html>
 <html lang = "pt">
 <head>
-	
-	<?php 
-		if(isset($_SESSION))
-		{
-			session_destroy();
-		}
-        session_start();
-        if((!isset($_SESSION['user']) == true) and (!isset($_SESSION['password']) == true))
-        {
-            unset($_SESSION['user']);
-            unset($_SESSION['password']);
-            //header('location:login.php');
-        } 
-        $logado = $_SESSION['user'];
-    ?>
-
 	<meta charset = "UTF-8">
 	<title>Tetrauros - Tela de Cadastro</title>
 </head>
