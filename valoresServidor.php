@@ -1,6 +1,6 @@
 <?php 
-		$BD = "tetrauros";
-		$sname = "localhost";
-		$uname = "root";
-		$pwd = "";
+	$BD = "tetrauros";
+	$sname = "localhost";
+	$uname = "root";
+	$pwd = "";
 ?>

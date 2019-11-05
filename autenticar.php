@@ -5,6 +5,10 @@
 	$login = $_POST['nome'];
 	$senha = $_POST['senha'];
 
+	if(!isset($login) or !isset($senha)){
+		header("location: index.php") or die();
+	}
+
 	$login = stripcslashes($login);
 	$senha = stripcslashes($senha);
 
@@ -20,13 +24,11 @@
 		{
 			$_SESSION['user'] = $login;
 			$_SESSION['password'] = $senha;
-
 			header("location: index.php") or die();
 		}
 		else {
 			unset ($_SESSION['user']);
 			unset ($_SESSION['password']);
-
 			header("location: login.php") or die();
 		}
 	}
