@@ -16,8 +16,8 @@
 					<p>Telefone: <input type = 'text' name = 'telefone'</p>
 					<p>Email: <input type = 'email' name = 'email'</p>
 					<p>Username: <input type = 'text' name = 'username'</p>
-					<p>Senha: <input type = 'password' name = 'password'</p>
-					<input type = 'submit' value = 'Cadastrar'/>
+					<p>Senha: <input type = 'password' name = 'password'</p><br/><br/>
+					<input class='grande' type = 'submit' value = 'Cadastrar'/>
 				</form>";
 				
 				if (isset($_POST["username"]))

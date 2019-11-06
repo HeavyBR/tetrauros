@@ -72,6 +72,26 @@ button:disabled
     width: 154px;
     height: 40px;
     cursor: pointer;
+    display: inline-flex;
+    justify-content: center;
+    margin: 1 auto 0;
+}
+.grande_login
+{
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.5em;
+    margin-top: 5px;
+    background-color: #191970;
+    border-radius: 5px;
+    border: none;
+    color: white;
+    padding: 5px;
+    width: 154px;
+    height: 40px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
 }
 .corpo
 {
@@ -140,6 +160,10 @@ button:disabled
 .meio
 {
     width: 40%;
+}
+#test
+{
+    margin-left: 500px;
 }
 #tela, #CanvasNextPiece
 {

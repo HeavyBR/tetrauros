@@ -5,7 +5,7 @@
 	$login = $_POST['nome'];
 	$senha = $_POST['senha'];
 
-	if(!isset($login) or !isset($senha)){
+	if((!isset($login)) or (!isset($senha))){
 		header("location: index.php") or die();
 	}
 

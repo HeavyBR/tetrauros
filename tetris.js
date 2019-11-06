@@ -137,13 +137,7 @@ function reiniciar() {
 
 function attRanking() {
     if (gameOver) {
-        var nome = prompt("Entre com seu nome", "Jogador...")
-        if (nome == null || nome == "Jogador...") {
-            nome = "Sem nome";
-        }
-
         var dadosJogador = {
-            'NOME': nome,
             'PONTOS': pontos,
             'NIVEL': nivel,
             'MINUTO': minutos,
@@ -164,11 +158,10 @@ function attRanking() {
         });
 
         let tamanho = dadosRanking.length;
-        RANK = "Jogador | Pontos | Nivel | Tempo | Linhas" + "<br/><br/>";
+        RANK = "Pontos | Nivel | Tempo | Linhas" + "<br/><br/>";
 
         for (let i = 0; i < tamanho; i++) {
             RANK += "0" + i + ". ";
-            RANK += dadosRanking[i].NOME + "  |  ";
             RANK += dadosRanking[i].PONTOS + "  |  ";
             RANK += dadosRanking[i].NIVEL + "  |  ";
             RANK += dadosRanking[i].MINUTO + "min" + dadosRanking[i].SEGUNDO + "s" + "  |  ";
@@ -757,19 +750,6 @@ function redimensionarJogo() {
 
 };
 
-
-/*
-*         var dadosJogador = {
-            'NOME': nome,
-            'PONTOS': pontos,
-            'NIVEL': nivel,
-            'MINUTO': minutos,
-            'SEGUNDO': segundos,
-            'LINHAS': linhasDeletadas
-        }
-*
-*  */
-
 function GravaJogador(jogador)
 {
     // conecta ao servidor
@@ -777,11 +757,9 @@ function GravaJogador(jogador)
 
     /* colocar na url os valores que quer passar para o servidor.
        seu arquivo PHP deverá capturar os dados usando $_GET[]; */
-    var url = "http://localhost/index.php?pontos=" + jogador["PONTOS"] +"&" + "nivel=" + jogador["NIVEL"] + "&" + "minuto=" + jogador["MINUTO"] + "&" + "segundo=" + jogador["SEGUNDO"] + "&linhas=" + jogador['LINHAS'];
-    alert(url);
+    var url = "http://localhost/tetrauros/index.php?pontos=" + jogador["PONTOS"] +"&" + "nivel=" + jogador["NIVEL"] + "&" + "minuto=" + jogador["MINUTO"] + "&" + "segundo=" + jogador["SEGUNDO"] + "&linhas=" + jogador['LINHAS'];
+    //alert(url);
     xmlhttp.open("GET", url, true);
     xmlhttp.send();
-    alert("Gravado com sucesso no servidor");
+    //alert("Gravado com sucesso no servidor");
 }
-
-

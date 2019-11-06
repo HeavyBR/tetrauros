@@ -15,10 +15,10 @@
 		<h1 id="titulo">Tetrauros - Login</h1>
 		<form method = "POST" action = "autenticar.php">
 			<p> Usuário: <input type = "text" name = "nome"> </p>
-			<p> Senha: <input type = "password" name = "senha"> </p> 
-			<input class="grande" type = "submit"> <br/>
-			<button class="grande"><a href="cadastro.php">Cadastro</a></button>
+			<p> Senha: <input type = "password" name = "senha"> </p> <br/>
+			<input class="grande" type = "submit" value="Entrar"> <br/><br/>
 		</form>
-		
+			<button class="grande_login" onclick="window.location.href='cadastro.php'">Cadastrar</button>
+
 	</div>
 </body>
