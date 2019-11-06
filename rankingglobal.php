@@ -24,21 +24,9 @@
 
 		try {
 			$user = $_SESSION['user'];
-			$biscoito = $_COOKIE['dados'];
-			$biscoito = json_decode($biscoito);
+
 			$conn = new PDO("mysql:host=$sname;dbname=$BD", $uname, $pwd);
 			$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-			$nome = $conn->quote(strval($_SESSION['user']));
-			$pontos = intval($biscoito->PONTOS);
-			$nivel = intval($biscoito->NIVEL);
-			$duracao = intval($biscoito->MINUTO) + intval($biscoito->SEGUNDO);
-			$linhas = intval($biscoito->LINHAS);
-			date_default_timezone_set('America/Sao_Paulo');
-			$data = $conn->quote(date('Y-m-d H:i:s'));
-			$SQL = $conn->query("INSERT INTO partida (username,pontos,nivel,duracao,linhas,data) VALUES ($nome,$pontos,$nivel,$duracao,$linhas,$data)");
-
-
 			$conn->exec('SET @row_number := 0;');
 			$busca = 	'
 							SELECT 
@@ -82,7 +70,7 @@
 		}
 		catch(PDOException $e) {
 			echo "Ocorreu um erro: " . $e->getMessage();
-		}	
-	?>	
+		}
+	?>
 </body>		
 </html>

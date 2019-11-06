@@ -149,7 +149,8 @@ function attRanking() {
             'MINUTO': minutos,
             'SEGUNDO': segundos,
             'LINHAS': linhasDeletadas
-        }
+        };
+        GravaJogador(dadosJogador);
         dadosRanking.push(dadosJogador);
 
         dadosRanking.sort(function(a, b) {
@@ -174,7 +175,7 @@ function attRanking() {
             RANK += dadosRanking[i].LINHAS;
             RANK += "<br/>";
         }
-        createCookie("dados",dadosJogador);
+
         document.getElementById("rankingJogador").innerHTML = RANK;
         M.toast({
             html: 'Você está no RANKING!',
@@ -756,17 +757,31 @@ function redimensionarJogo() {
 
 };
 
-function createCookie(name, value, days) {
-    var expires;
-    if (days) {
-        var date = new Date();
-        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-        expires = "; expires=" + date.toGMTString();
-    }
-    else {
-        expires = "";
-    }
-    document.cookie = escape(name) + "=" + JSON.stringify(value) + expires + "; path=/";
+
+/*
+*         var dadosJogador = {
+            'NOME': nome,
+            'PONTOS': pontos,
+            'NIVEL': nivel,
+            'MINUTO': minutos,
+            'SEGUNDO': segundos,
+            'LINHAS': linhasDeletadas
+        }
+*
+*  */
+
+function GravaJogador(jogador)
+{
+    // conecta ao servidor
+    var xmlhttp = new XMLHttpRequest();
+
+    /* colocar na url os valores que quer passar para o servidor.
+       seu arquivo PHP deverá capturar os dados usando $_GET[]; */
+    var url = "http://localhost/index.php?pontos=" + jogador["PONTOS"] +"&" + "nivel=" + jogador["NIVEL"] + "&" + "minuto=" + jogador["MINUTO"] + "&" + "segundo=" + jogador["SEGUNDO"] + "&linhas=" + jogador['LINHAS'];
+    alert(url);
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();
+    alert("Gravado com sucesso no servidor");
 }
 
 

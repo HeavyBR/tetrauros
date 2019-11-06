@@ -4,7 +4,7 @@
 
    <?php 
         session_start();
-        if((!isset($_SESSION['user']) == true) and (!isset($_SESSION['password']) == true))
+        if((!isset($_SESSION['user'])) and (!isset($_SESSION['password'])))
         {
             unset($_SESSION['user']);
             unset($_SESSION['password']);
@@ -20,6 +20,7 @@
 
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link rel="stylesheet" href="styles.css" type="text/css">
     <style>
         @import url('https://fonts.googleapis.com/css?family=Black+Ops+One|Press+Start+2P|Saira+Stencil+One&display=swap');
@@ -83,7 +84,37 @@
         </tr>
     </table>
 </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src="tetris.js"></script>
 </body>
 
 </html>
+
+<?php
+		include "valoresServidor.php";
+        if(isset($_GET['pontos']))
+        {/*
+        http://localhost/index.php?pontos=0&nivel=1&minuto=0&segundo=10&linhas=undefined
+        */
+
+            try {
+                $conn = new PDO("mysql:host=$sname;dbname=$BD", $uname, $pwd);
+                $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                $nome = $conn->quote(strval($_SESSION['user']));
+                $pontos = intval($_GET['pontos']);
+                $nivel = intval($_GET['nivel']);
+                $duracao = intval($_GET['minuto']) + intval($_GET['segundo']);
+                $linhas = intval($_GET['linhas']);
+                date_default_timezone_set('America/Sao_Paulo');
+                $data = $conn->quote(date('Y-m-d H:i:s'));
+                $SQL = $conn->query("INSERT INTO partida (username,pontos,nivel,duracao,linhas,data) VALUES ($nome,$pontos,$nivel,$duracao,$linhas,$data)");
+
+            }
+            catch(PDOException $e) {
+                echo "Ocorreu um erro: " . $e->getMessage();
+            }
+
+        }
+
