@@ -42,8 +42,8 @@
 						<p>Senha: <input type = 'password' name = 'senha'</p>
 						<p>Nova senha: <input type = 'password' name = 'nova_senha'</p>
 						<input type = 'submit' value = 'Alterar'/>
-					</form>";
-				
+					</form>";	
+
 				if (isset($_POST["nome_completo"]) && isset($_POST["novo_nome"]))
 				{
 					try
@@ -51,16 +51,19 @@
 						$conn = new PDO("mysql:host=$sname;dbname=$BD", $uname, $pwd);
 						$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-						$nome = $_POST["nome_completo"];
-						$novo_nome = $conn->quote($_POST["novo_nome"]);
+						$nome = $_POST["nome"];
+						$novo_email = $conn->quote($_POST["nome_completo"]);
+						if($_POST["nome_completo"] != ""){
+							$SQL = "UPDATE usuario SET nome_completo = $nome_completo WHERE username = '$user'";
+							$conn->exec($SQL);
 
-						$SQL = "UPDATE usuario SET nome_completo = $novo_nome WHERE username = '$user'";
-						$conn->exec($SQL);
-
-						echo "<p> Alteracao de nome realizada com sucesso! </p>";
-
-						header("location: ../index.php");
-						die('Não ignore meu cabeçalho...');
+							//echo "<p> Alteracao de senha realizada com sucesso! </p>";
+							header("location: index.php");
+							die();
+						}
+						else {
+							header("location: alteracoes.php");
+						}
 					}
 					catch(PDOException $e)
 					{
@@ -76,14 +79,18 @@
 						$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 						$telefone = $_POST["telefone"];
-						$novo_telefone = $conn->quote($_POST["novo_telefone"]);
+						$novo_email = $conn->quote($_POST["novo_telefone"]);
+						if($_POST["novo_telefone"] != ""){
+							$SQL = "UPDATE usuario SET telefone = $novo_telefone WHERE username = '$user'";
+							$conn->exec($SQL);
 
-						$SQL = "UPDATE usuario SET telefone = $novo_telefone WHERE username = '$user'";
-						$conn->exec($SQL);
-
-						echo "<p> Alteracao de telefone realizada com sucesso! </p>";
-						header("location: ../index.php");
-						die('Não ignore meu cabeçalho...');
+							//echo "<p> Alteracao de senha realizada com sucesso! </p>";
+							header("location: index.php");
+							die();
+						}
+						else {
+							header("location: alteracoes.php");
+						}
 					}
 					catch(PDOException $e)
 					{
@@ -100,13 +107,17 @@
 
 						$email = $_POST["email"];
 						$novo_email = $conn->quote($_POST["novo_email"]);
- 
-						$SQL = "UPDATE usuario SET email = $novo_email WHERE username = '$user'";
-						$conn->exec($SQL);
+						if($_POST["novo_email"] != ""){
+							$SQL = "UPDATE usuario SET email = $novo_email WHERE username = '$user'";
+							$conn->exec($SQL);
 
-						echo "<p> Alteracao de email realizada com sucesso! </p>";
-						header("location: ../index.php");
-						die('Não ignore meu cabeçalho...');
+							//echo "<p> Alteracao de senha realizada com sucesso! </p>";
+							header("location: index.php");
+							die();
+						}
+						else {
+							header("location: alteracoes.php");
+						}
 					}
 					catch(PDOException $e)
 					{
@@ -123,13 +134,17 @@
 
 						$senha = $_POST["senha"];
 						$nova_senha = $conn->quote($_POST["nova_senha"]);
+						if($_POST["nova_senha"] != ""){
+							$SQL = "UPDATE usuario SET password = $nova_senha WHERE username = '$user'";
+							$conn->exec($SQL);
 
-						$SQL = "UPDATE usuario SET password = $nova_senha WHERE username = '$user'";
-						$conn->exec($SQL);
-
-						echo "<p> Alteracao de senha realizada com sucesso! </p>";
-						header("location: ../index.php");
-						die('Não ignore meu cabeçalho...');
+							//echo "<p> Alteracao de senha realizada com sucesso! </p>";
+							header("location: index.php");
+							die();
+						}
+						else {
+							header("location: alteracoes.php");
+						}
 					}
 					catch(PDOException $e)
 					{
@@ -143,5 +158,7 @@
 					echo $formSenha;
 				} 
 			?>	
+
+		<button class="grande" onclick="window.location.href='index.php'">Voltar ao Jogo</button>
 </body>		
 </html>

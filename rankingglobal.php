@@ -42,7 +42,12 @@
 					break;
 				}
 			}
+		?>
 
+			<button class="grande" onclick="window.location.href='index.php'">Voltar ao Jogo</button>
+			<button class="grande" onclick="window.location.href='desconexao.php'">Desconectar</button>
+
+		<?php
 
 			$SQL = $conn->query("SELECT * FROM partida ORDER BY pontos DESC LIMIT 10");
 			echo "<h1>Ranking Global</h1>";

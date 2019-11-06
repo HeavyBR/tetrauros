@@ -20,7 +20,7 @@
 					<input class='grande' type = 'submit' value = 'Cadastrar'/>
 				</form>";
 				
-				if (isset($_POST["username"]))
+				if (isset($_POST["username"]) and ($_POST["username"]!="") and ($_POST["nome_completo"]!="") and ($_POST["cpf"]!="") and ($_POST["telefone"]!="") and ($_POST["email"]!="") and ($_POST["senha"]!="") and ($_POST["data_nascimento"]!="") and ($_POST["username"]!=""))
 				{
 					try
 					{
