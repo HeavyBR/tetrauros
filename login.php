@@ -13,12 +13,12 @@
 <body>
 	<div class="corpo_menor">
 		<h1 id="titulo">Tetrauros - Login</h1>
+		<br/><br/>
 		<form method = "POST" action = "autenticar.php">
 			<p> Usuário: <input type = "text" name = "nome"> </p>
 			<p> Senha: <input type = "password" name = "senha"> </p> <br/>
 			<input class="grande" type = "submit" value="Entrar"> <br/><br/>
 		</form>
 			<button class="grande_login" onclick="window.location.href='cadastro.php'">Cadastrar</button>
-
 	</div>
 </body>

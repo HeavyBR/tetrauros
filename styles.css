@@ -95,6 +95,7 @@ button:disabled
 }
 .corpo
 {
+    text-align: center;
     position: absolute;
     background-color:black;
     opacity:0.9; /* Levemente transparente */
@@ -105,9 +106,11 @@ button:disabled
     padding-left:2%;
     padding-right:2%;
 
-    height:96%;
-    padding-top:2%;
-    padding-bottom:2%;
+    height:92%;
+    margin-top:2%;
+    margin-bottom:1%;
+    padding-top:0%;
+    padding-bottom:0%;
 
     border-radius:15px;
     color: whitesmoke;
@@ -119,17 +122,17 @@ button:disabled
     background-color: black;
     opacity:0.9; /* Levemente transparente */
 
-    width:40%;
-    margin-left:25%;
-    margin-right:25%;
+    width:50%;
+    margin-left:20%;
+    margin-right:20%;
     padding-left:5%;
     padding-right:5%;
 
-    height:40%;
+    height:60%;
     margin-top:10%;
-    margin-bottom:8%;
-    padding-top:5%;
-    padding-bottom:5%;
+    margin-bottom:5%;
+    padding-top:1%;
+    padding-bottom:1%;
 
     border-radius:15px;
     color: whitesmoke;
@@ -194,4 +197,14 @@ button:disabled
 #score, #segundo, #minuto, #stage, #deletedLines, #rankingJogador
 {
     display: inline-block;
+}
+#gambiarra
+{
+    float: left;
+    margin-left: 10%;
+}
+
+#gambiarratable
+{
+    margin-top: 200%;
 }
